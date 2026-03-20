@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard UST - Seguimiento 2026</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
+        body{ font-family: 'DM Sans', sans-serif; background: #EEEAE0; padding: 20px; color: #1A3A6B; }
+        .card{ background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 6px solid #C8A951; max-width: 1200px; margin: auto; }
+        h1{ font-size: 1.4rem; margin-bottom: 5px; text-align: center; }
+        table{ width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th{ background: #1A3A6B; color: white; padding: 12px; text-align: left; font-size: 11px; text-transform: uppercase; }
+        td{ padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; color: #333; }
+        .badge{ padding: 4px 10px; border-radius: 15px; font-size: 10px; font-weight: bold; display: inline-block; min-width: 90px; text-align: center; }
+        .Realizada, .REALIZADA{ background: #27A06E; color: white; }
+        .Agendada, .AGENDADA, .Proceso{ background: #C8A951; color: white; }
+        .Alerta, .ALERTA, .Pendiente{ background: #D63031; color: white; }
+        #loading{ text-align: center; padding: 40px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>UNIVERSIDAD SANTO TOMÁS</h1>
+    <p style="text-align:center; opacity:0.7;">Proyecto e-Learning 2026-1 | Hoja: Seguimiento</p>
+    
+    <div id="loading">Conectando con Google Drive...</div>
+    <div id="tabla-container"></div>
+</div>
+
+<script>
+    // Agregamos un número aleatorio al final para que Google no nos de una versión vieja (Cache Busting)
+    const URL_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR7KLTJADlIkNhjcC_V9X6a-eYiV30pDdOtlOPUsfvy1Z9AY-6TseqeFH-rfZjwtuSjjlQxAw0ym3Tm/pub?gid=1889016436&single=true&output=csv&t=' + Math.random();
+
+    function cargarDatos() {
+        Papa.parse(URL_CSV, {
+            download: true,
+            header: false, // Cambiamos a FALSE para leer por posición de columna
+            skipEmptyLines: true,
+            complete: function(results) {
+                if(!results.data || results.data.length < 2) {
+                    document.getElementById('loading').innerHTML = "El Excel parece no tener datos en la hoja 'Seguimiento'.";
+                    return;
+                }
+                
+                document.getElementById('loading').style.display = 'none';
+                let filas = results.data;
+                
+                let html = '<table><thead><tr>';
+                // Usamos la primera fila del Excel para los títulos
+                filas[0].forEach(col => html += `<th>${col}</th>`);
+                html += '</tr></thead><tbody>';
+
+                // Empezamos desde la segunda fila (índice 1) para saltar los títulos
+                for(let i = 1; i < filas.length; i++) {
+                    let fila = filas[i];
+                    if(!fila[0] && !fila[1]) continue; // Salta filas vacías
+
+                    html += '<tr>';
+                    fila.forEach((celda, index) => {
+                        // Si es la columna de Estado (asumimos que es la 4ta o tiene texto clave)
+                        if(celda.toLowerCase().includes('realizada') || celda.toLowerCase().includes('agendada') || celda.toLowerCase().includes('alerta')) {
+                            let clase = celda.replace(/\s+/g, '');
+                            html += `<td><span class="badge ${clase}">${celda}</span></td>`;
+                        } else {
+                            html += `<td>${celda || '—'}</td>`;
+                        }
+                    });
+                    html += '</tr>';
+                }
+
+                html += '</tbody></table>';
+                document.getElementById('tabla-container').innerHTML = html;
+            },
+            error: function() {
+                document.getElementById('loading').innerHTML = "Error crítico de conexión. Revisa que el Excel esté publicado.";
+            }
+        });
+    }
+
+    cargarDatos();
+    setInterval(cargarDatos, 120000); // Actualiza cada 2 min
+</script>
+
+</body>
+</html>
