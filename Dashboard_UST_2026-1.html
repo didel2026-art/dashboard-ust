@@ -2,86 +2,117 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard UST - Seguimiento 2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento e-Learning UST 2026-1</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
-        body{ font-family: 'DM Sans', sans-serif; background: #EEEAE0; padding: 20px; color: #1A3A6B; }
-        .card{ background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 6px solid #C8A951; max-width: 1200px; margin: auto; }
-        h1{ font-size: 1.4rem; margin-bottom: 5px; text-align: center; }
-        table{ width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
-        th{ background: #1A3A6B; color: white; padding: 12px; text-align: left; font-size: 11px; text-transform: uppercase; }
-        td{ padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; color: #333; }
-        .badge{ padding: 4px 10px; border-radius: 15px; font-size: 10px; font-weight: bold; display: inline-block; min-width: 90px; text-align: center; }
-        .Realizada, .REALIZADA{ background: #27A06E; color: white; }
-        .Agendada, .AGENDADA, .Proceso{ background: #C8A951; color: white; }
-        .Alerta, .ALERTA, .Pendiente{ background: #D63031; color: white; }
-        #loading{ text-align: center; padding: 40px; font-weight: bold; }
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+        *{box-sizing:border-box; margin:0; padding:0}
+        body{font-family:'DM Sans', sans-serif; background:#EEEAE0; color:#1C1C1C; padding:20px}
+        :root{ --azul:#1A3A6B; --oro:#C8A951; --verde:#27A06E; --rojo:#D63031; --blanco:#fff; --borde:#DDD8C4; }
+        .wrap{max-width:1400px; margin:0 auto}
+        .header{background:var(--azul); color:#fff; padding:20px; border-radius:14px; margin-bottom:15px; border-bottom:4px solid var(--oro); display:flex; justify-content:space-between; align-items:center}
+        .h-ust{font-size:10px; font-weight:700; color:var(--oro); letter-spacing:2px}
+        .h-title{font-size:20px; font-weight:700}
+        .panel{background:var(--blanco); border-radius:11px; padding:20px; border:1px solid var(--borde); box-shadow: 0 4px 6px rgba(0,0,0,0.05)}
+        .ptitle{font-size:11px; font-weight:700; color:var(--azul); text-transform:uppercase; margin-bottom:15px; border-bottom:2px solid #F5EDD0; padding-bottom:5px}
+        table{width:100%; border-collapse:collapse; font-size:13px}
+        th{text-align:left; padding:12px; background:#F8F6EE; color:var(--azul); font-weight:700; text-transform:uppercase; font-size:11px}
+        td{padding:12px; border-bottom:1px solid #F0EDE0}
+        .badge{padding:5px 12px; border-radius:20px; font-size:11px; font-weight:700; display:inline-block; text-align: center; min-width: 110px}
+        .bg-realizada{background:#EDF7EF; color:#1E6B2E}
+        .bg-agendada{background:#F5EDD0; color:#7A5C00}
+        .bg-alerta{background:#FDF0F0; color:#8B1A1A}
+        .bg-default{background:#F0F0F0; color:#666}
+        #loading{text-align:center; padding:50px; font-weight:700; color:var(--azul)}
     </style>
 </head>
 <body>
-
-<div class="card">
-    <h1>UNIVERSIDAD SANTO TOMÁS</h1>
-    <p style="text-align:center; opacity:0.7;">Proyecto e-Learning 2026-1 | Hoja: Seguimiento</p>
-    
+<div class="wrap">
+    <div class="header">
+        <div>
+            <div class="h-ust">UNIVERSIDAD SANTO TOMÁS</div>
+            <div class="h-title">Seguimiento Proyecto e-Learning 2026-1</div>
+        </div>
+        <div style="text-align:right; font-size:11px; opacity:0.8">
+            Hoja: <strong>Seguimiento</strong><br>
+            Sincronización en tiempo real ●
+        </div>
+    </div>
     <div id="loading">Conectando con Google Drive...</div>
-    <div id="tabla-container"></div>
+    <div id="dashboard-content" style="display:none">
+        <div class="panel">
+            <div class="ptitle">Estado de Virtualización por Asignatura</div>
+            <div style="overflow-x:auto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Facultad</th>
+                            <th>Asignatura</th>
+                            <th>Docente</th>
+                            <th>Estado Reunión</th>
+                            <th>Planificación</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
-
 <script>
-    // Agregamos un número aleatorio al final para que Google no nos de una versión vieja (Cache Busting)
-    const URL_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR7KLTJADlIkNhjcC_V9X6a-eYiV30pDdOtlOPUsfvy1Z9AY-6TseqeFH-rfZjwtuSjjlQxAw0ym3Tm/pub?gid=1889016436&single=true&output=csv&t=' + Math.random();
+    // Enlace directo a tu hoja de seguimiento
+    const URL_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR7KLTJADlIkNhjcC_V9X6a-eYiV30pDdOtlOPUsfvy1Z9AY-6TseqeFH-rfZjwtuSjjlQxAw0ym3Tm/pub?gid=1889016436&single=true&output=csv';
 
     function cargarDatos() {
         Papa.parse(URL_CSV, {
             download: true,
-            header: false, // Cambiamos a FALSE para leer por posición de columna
+            header: true,
             skipEmptyLines: true,
             complete: function(results) {
-                if(!results.data || results.data.length < 2) {
-                    document.getElementById('loading').innerHTML = "El Excel parece no tener datos en la hoja 'Seguimiento'.";
-                    return;
+                if(results.data) {
+                    renderizarTabla(results.data);
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('dashboard-content').style.display = 'block';
                 }
-                
-                document.getElementById('loading').style.display = 'none';
-                let filas = results.data;
-                
-                let html = '<table><thead><tr>';
-                // Usamos la primera fila del Excel para los títulos
-                filas[0].forEach(col => html += `<th>${col}</th>`);
-                html += '</tr></thead><tbody>';
-
-                // Empezamos desde la segunda fila (índice 1) para saltar los títulos
-                for(let i = 1; i < filas.length; i++) {
-                    let fila = filas[i];
-                    if(!fila[0] && !fila[1]) continue; // Salta filas vacías
-
-                    html += '<tr>';
-                    fila.forEach((celda, index) => {
-                        // Si es la columna de Estado (asumimos que es la 4ta o tiene texto clave)
-                        if(celda.toLowerCase().includes('realizada') || celda.toLowerCase().includes('agendada') || celda.toLowerCase().includes('alerta')) {
-                            let clase = celda.replace(/\s+/g, '');
-                            html += `<td><span class="badge ${clase}">${celda}</span></td>`;
-                        } else {
-                            html += `<td>${celda || '—'}</td>`;
-                        }
-                    });
-                    html += '</tr>';
-                }
-
-                html += '</tbody></table>';
-                document.getElementById('tabla-container').innerHTML = html;
-            },
-            error: function() {
-                document.getElementById('loading').innerHTML = "Error crítico de conexión. Revisa que el Excel esté publicado.";
             }
         });
     }
 
-    cargarDatos();
-    setInterval(cargarDatos, 120000); // Actualiza cada 2 min
-</script>
+    function renderizarTabla(datos) {
+        const body = document.getElementById('tabla-body');
+        body.innerHTML = '';
+        datos.forEach(fila => {
+            // Buscador flexible por si cambian nombres de columnas
+            const getField = (keys) => { for (let k of keys) { if (fila[k] !== undefined) return fila[k]; } return ''; };
+            
+            const facultad = getField(['Facultad', 'FACULTAD']);
+            const asignatura = getField(['Asignatura', 'ASIGNATURA', 'Nombre']);
+            const docente = getField(['Docente', 'DOCENTE']);
+            const estado = getField(['Estado', 'ESTADO', 'Estado Reunión', 'Estado Reunión ']).trim();
+            const plan = getField(['Planificacion', 'Planificación', 'PLANIFICACIÓN']);
 
+            if(!asignatura && !facultad) return; 
+            
+            let claseEstado = 'bg-default';
+            let e = estado.toLowerCase();
+            if(e.includes('realizada')) claseEstado = 'bg-realizada';
+            else if(e.includes('agendada') || e.includes('proceso') || e.includes('enviada')) claseEstado = 'bg-agendada';
+            else if(e.includes('alerta') || e.includes('sin') || e.includes('pendiente')) claseEstado = 'bg-alerta';
+            
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${facultad}</td>
+                <td style="font-weight:700">${asignatura}</td>
+                <td>${docente}</td>
+                <td><span class="badge ${claseEstado}">${estado || 'Pendiente'}</span></td>
+                <td>${plan || '—'}</td>
+            `;
+            body.appendChild(tr);
+        });
+    }
+    cargarDatos();
+    setInterval(cargarDatos, 60000); // Actualiza cada minuto
+</script>
 </body>
 </html>
