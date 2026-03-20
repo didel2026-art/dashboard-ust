@@ -6,100 +6,28 @@
     <title>Seguimiento Proyecto e-Learning UST 2026-1</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
-        /* ESTILOS INSTITUCIONALES UST */
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
-        
         *{box-sizing:border-box; margin:0; padding:0}
-        
-        body{
-            font-family:'DM Sans', sans-serif;
-            background:#EEEAE0;
-            color:#1C1C1C;
-            padding:20px;
-        }
-
-        :root{ 
-            --azul:#1A3A6B; 
-            --oro:#C8A951; 
-            --verde:#27A06E; 
-            --rojo:#D63031; 
-            --blanco:#fff; 
-            --borde:#DDD8C4; 
-        }
-
+        body{font-family:'DM Sans', sans-serif; background:#EEEAE0; color:#1C1C1C; padding:20px}
+        :root{ --azul:#1A3A6B; --oro:#C8A951; --verde:#27A06E; --rojo:#D63031; --blanco:#fff; --borde:#DDD8C4; }
         .wrap{max-width:1400px; margin:0 auto}
-
-        .header{
-            background:var(--azul);
-            color:#fff;
-            padding:20px;
-            border-radius:14px;
-            margin-bottom:15px;
-            border-bottom:4px solid var(--oro);
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-        }
-
+        .header{background:var(--azul); color:#fff; padding:20px; border-radius:14px; margin-bottom:15px; border-bottom:4px solid var(--oro); display:flex; justify-content:space-between; align-items:center}
         .h-ust{font-size:10px; font-weight:700; color:var(--oro); letter-spacing:2px}
         .h-title{font-size:20px; font-weight:700}
-
-        .panel{
-            background:var(--blanco);
-            border-radius:11px;
-            padding:20px;
-            border:1px solid var(--borde);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        .ptitle{
-            font-size:11px;
-            font-weight:700;
-            color:var(--azul);
-            text-transform:uppercase;
-            margin-bottom:15px;
-            border-bottom:2px solid #F5EDD0;
-            padding-bottom:5px;
-        }
-
+        .panel{background:var(--blanco); border-radius:11px; padding:20px; border:1px solid var(--borde); box-shadow: 0 4px 6px rgba(0,0,0,0.05)}
+        .ptitle{font-size:11px; font-weight:700; color:var(--azul); text-transform:uppercase; margin-bottom:15px; border-bottom:2px solid #F5EDD0; padding-bottom:5px}
         table{width:100%; border-collapse:collapse; font-size:13px}
-        th{
-            text-align:left;
-            padding:12px;
-            background:#F8F6EE;
-            color:var(--azul);
-            font-weight:700;
-            text-transform:uppercase;
-            font-size:11px;
-        }
+        th{text-align:left; padding:12px; background:#F8F6EE; color:var(--azul); font-weight:700; text-transform:uppercase; font-size:11px}
         td{padding:12px; border-bottom:1px solid #F0EDE0}
-
-        .badge{
-            padding:5px 12px;
-            border-radius:20px;
-            font-size:11px;
-            font-weight:700;
-            display:inline-block;
-            text-align: center;
-            min-width: 110px;
-        }
-
-        /* Estados dinámicos */
+        .badge{padding:5px 12px; border-radius:20px; font-size:11px; font-weight:700; display:inline-block; text-align: center; min-width: 110px}
         .bg-realizada{background:#EDF7EF; color:#1E6B2E}
         .bg-agendada{background:#F5EDD0; color:#7A5C00}
         .bg-alerta{background:#FDF0F0; color:#8B1A1A}
         .bg-default{background:#F0F0F0; color:#666}
-
-        #loading{
-            text-align:center;
-            padding:50px;
-            font-weight:700;
-            color:var(--azul);
-        }
+        #loading{text-align:center; padding:50px; font-weight:700; color:var(--azul)}
     </style>
 </head>
 <body>
-
 <div class="wrap">
     <div class="header">
         <div>
@@ -111,14 +39,12 @@
             Sincronización en tiempo real ●
         </div>
     </div>
-
     <div id="loading">Cargando datos desde la hoja "Seguimiento"...</div>
-
     <div id="dashboard-content" style="display:none">
         <div class="panel">
             <div class="ptitle">Estado de Virtualización por Asignatura</div>
             <div style="overflow-x:auto">
-                <table id="tabla-seguimiento">
+                <table>
                     <thead>
                         <tr>
                             <th>Facultad</th>
@@ -134,9 +60,7 @@
         </div>
     </div>
 </div>
-
 <script>
-    // ENLACE CSV ESPECÍFICO PARA LA HOJA "SEGUIMIENTO"
     const URL_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR7KLTJADlIkNhjcC_V9X6a-eYiV30pDdOtlOPUsfvy1Z9AY-6TseqeFH-rfZjwtuSjjlQxAw0ym3Tm/pub?gid=1889016436&single=true&output=csv';
 
     function cargarDatos() {
@@ -145,14 +69,11 @@
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
-                if(results.data && results.data.length > 0) {
+                if(results.data) {
                     renderizarTabla(results.data);
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('dashboard-content').style.display = 'block';
                 }
-            },
-            error: function() {
-                document.getElementById('loading').innerHTML = "Error: No se pudo conectar con la hoja 'Seguimiento'.";
             }
         });
     }
@@ -160,35 +81,23 @@
     function renderizarTabla(datos) {
         const body = document.getElementById('tabla-body');
         body.innerHTML = '';
-        
         datos.forEach(fila => {
-            // Función para buscar datos ignorando mayúsculas/minúsculas o tildes
-            const getField = (keys) => {
-                for (let k of keys) {
-                    if (fila[k] !== undefined) return fila[k];
-                }
-                return '';
-            };
+            const getField = (keys) => { for (let k of keys) { if (fila[k] !== undefined) return fila[k]; } return ''; };
+            const facultad = getField(['Facultad', 'FACULTAD']);
+            const asignatura = getField(['Asignatura', 'ASIGNATURA', 'Nombre']);
+            const docente = getField(['Docente', 'DOCENTE']);
+            const estado = getField(['Estado', 'ESTADO', 'Estado Reunión']).trim();
+            const plan = getField(['Planificacion', 'Planificación', 'PLANIFICACIÓN']);
 
-            const facultad = getField(['Facultad', 'FACULTAD', 'facultad']);
-            const asignatura = getField(['Asignatura', 'ASIGNATURA', 'asignatura', 'Nombre']);
-            const docente = getField(['Docente', 'DOCENTE', 'docente', 'Profesor']);
-            const estado = getField(['Estado', 'ESTADO', 'estado', 'Estado Reunión', 'Estado Reunión ']).trim();
-            const plan = getField(['Planificacion', 'Planificación', 'PLANIFICACION', 'PLANIFICACIÓN', 'plan']);
-
-            // Solo mostrar filas que tengan al menos una asignatura o facultad
             if(!asignatura && !facultad) return; 
             
-            const tr = document.createElement('tr');
-            
-            // Lógica de colores según el texto del estado
             let claseEstado = 'bg-default';
             let estNorm = estado.toLowerCase();
-            
             if(estNorm.includes('realizada')) claseEstado = 'bg-realizada';
             else if(estNorm.includes('agendada') || estNorm.includes('proceso') || estNorm.includes('enviada')) claseEstado = 'bg-agendada';
             else if(estNorm.includes('alerta') || estNorm.includes('sin') || estNorm.includes('pendiente')) claseEstado = 'bg-alerta';
             
+            const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${facultad}</td>
                 <td style="font-weight:700">${asignatura}</td>
@@ -199,13 +108,8 @@
             body.appendChild(tr);
         });
     }
-
-    // Iniciar carga
     cargarDatos();
-
-    // Refrescar automáticamente cada 2 minutos
     setInterval(cargarDatos, 120000);
 </script>
-
 </body>
 </html>
