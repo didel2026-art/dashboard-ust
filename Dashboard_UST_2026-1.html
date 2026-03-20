@@ -8,23 +8,102 @@
     <style>
         /* ESTILOS INSTITUCIONALES UST */
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono&display=swap');
+        
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:'DM Sans',sans-serif;background:#EEEAE0;color:#1C1C1C;padding:20px}
-        :root{ --az:#1A3A6B; --am:#C8A951; --ve:#27A06E; --ro:#D63031; --white:#fff; --borde:#DDD8C4; }
-        .wrap{max-width:1400px;margin:0 auto}
-        .header{background:var(--az);color:#fff;padding:20px;border-radius:14px;margin-bottom:15px;border-bottom:4px solid var(--am); display:flex; justify-content:space-between; align-items:center}
-        .h-ust{font-size:10px;font-weight:700;color:var(--am);letter-spacing:2px}
-        .h-title{font-size:20px;font-weight:700}
-        .panel{background:var(--white);border-radius:11px;padding:15px;border:1px solid var(--borde);margin-bottom:15px}
-        .ptitle{font-size:11px;font-weight:700;color:var(--az);text-transform:uppercase;margin-bottom:12px;border-bottom:2px solid #F5EDD0;padding-bottom:5px}
-        table{width:100%;border-collapse:collapse;font-size:12px}
-        th{text-align:left;padding:8px;background:#F8F6EE;color:var(--az);font-weight:700;text-transform:uppercase;font-size:10px}
-        td{padding:8px;border-bottom:1px solid #F0EDE0}
-        .badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;display:inline-block}
-        .bg-realizada{background:#EDF7EF;color:#1E6B2E}
-        .bg-agendada{background:#F5EDD0;color:#7A5C00}
-        .bg-alerta{background:#FDF0F0;color:#8B1A1A}
-        #loading{text-align:center;padding:50px;font-weight:700;color:var(--az)}
+        
+        body{
+            font-family:'DM Sans', sans-serif;
+            background:#EEEAE0;
+            color:#1C1C1C;
+            padding:20px;
+        }
+
+        :root{ 
+            --az:#1A3A6B; 
+            --am:#C8A951; 
+            --ve:#27A06E; 
+            --ro:#D63031; 
+            --white:#fff; 
+            --borde:#DDD8C4; 
+        }
+
+        .wrap{max-width:1400px; margin:0 auto}
+
+        .header{
+            background:var(--az);
+            color:#fff;
+            padding:20px;
+            border-radius:14px;
+            margin-bottom:15px;
+            border-bottom:4px solid var(--am);
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .h-ust{font-size:10px; font-weight:700; color:var(--am); letter-spacing:2px}
+        .h-title{font-size:20px; font-weight:700}
+
+        .panel{
+            background:var(--white);
+            border-radius:11px;
+            padding:15px;
+            border:1px solid var(--borde);
+            margin-bottom:15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .ptitle{
+            font-size:11px;
+            font-weight:700;
+            color:var(--az);
+            text-transform:uppercase;
+            margin-bottom:12px;
+            border-bottom:2px solid #F5EDD0;
+            padding-bottom:5px;
+        }
+
+        table{width:100%; border-collapse:collapse; font-size:12px}
+        th{
+            text-align:left;
+            padding:10px;
+            background:#F8F6EE;
+            color:var(--az);
+            font-weight:700;
+            text-transform:uppercase;
+            font-size:10px;
+        }
+        td{padding:10px; border-bottom:1px solid #F0EDE0}
+
+        .badge{
+            padding:4px 12px;
+            border-radius:20px;
+            font-size:10px;
+            font-weight:700;
+            display:inline-block;
+            text-align: center;
+            min-width: 90px;
+        }
+
+        /* Colores dinámicos para los estados */
+        .bg-realizada{background:#EDF7EF; color:#1E6B2E}
+        .bg-agendada{background:#F5EDD0; color:#7A5C00}
+        .bg-alerta{background:#FDF0F0; color:#8B1A1A}
+        .bg-default{background:#F0F0F0; color:#666}
+
+        #loading{
+            text-align:center;
+            padding:50px;
+            font-weight:700;
+            color:var(--az);
+        }
+
+        .footer{
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -37,15 +116,15 @@
         </div>
         <div style="text-align:right; font-size:11px; opacity:0.8">
             Archivo: <strong>Reuniones_Proyecto2026-1</strong><br>
-            Sincronizado con Google Drive ●
+            Sincronización Automática ●
         </div>
     </div>
 
-    <div id="loading">Cargando datos en tiempo real...</div>
+    <div id="loading">Conectando con Google Drive...</div>
 
     <div id="dashboard-content" style="display:none">
         <div class="panel">
-            <div class="ptitle">Estado por Asignatura (Actualización Automática)</div>
+            <div class="ptitle">Estado de Virtualización por Asignatura</div>
             <div style="overflow-x:auto">
                 <table id="tabla-seguimiento">
                     <thead>
@@ -57,25 +136,33 @@
                             <th>Planificación</th>
                         </tr>
                     </thead>
-                    <tbody id="tabla-body"></tbody>
+                    <tbody id="tabla-body">
+                        </tbody>
                 </table>
             </div>
+        </div>
+        <div class="footer">
+            Los datos se actualizan automáticamente cada vez que editas tu Excel en Drive.
         </div>
     </div>
 </div>
 
 <script>
-    // PEGA AQUÍ EL LINK CSV QUE COPIASTE EN EL PASO 1
-    const URL_CSV = 'REEMPLAZA_AQUI_CON_EL_LINK_CSV';
+    // Tu enlace de Google Sheets en formato CSV
+    const URL_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR7KLTJADlIkNhjcC_V9X6a-eYiV30pDdOtlOPUsfvy1Z9AY-6TseqeFH-rfZjwtuSjjlQxAw0ym3Tm/pub?output=csv';
 
-    async function cargarDatos() {
+    function cargarDatos() {
         Papa.parse(URL_CSV, {
             download: true,
             header: true,
+            skipEmptyLines: true,
             complete: function(results) {
                 renderizarTabla(results.data);
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('dashboard-content').style.display = 'block';
+            },
+            error: function(err) {
+                document.getElementById('loading').textContent = "Error al conectar con Drive. Revisa la publicación del Excel.";
             }
         });
     }
@@ -85,28 +172,40 @@
         body.innerHTML = '';
         
         datos.forEach(fila => {
-            if(!fila.Asignatura) return; // Salta filas vacías
+            // Ajustamos los nombres de las columnas para que coincidan con tu Excel
+            const facultad = fila.Facultad || fila.FACULTAD || '';
+            const asignatura = fila.Asignatura || fila.ASIGNATURA || '';
+            const docente = fila.Docente || fila.DOCENTE || '';
+            const estado = fila.Estado || fila.ESTADO || 'Sin datos';
+            const plan = fila.Planificacion || fila.PLANIFICACION || '—';
+
+            if(!asignatura) return; // Ignora filas vacías
             
             const tr = document.createElement('tr');
-            const claseEstado = fila.Estado === 'Realizada' ? 'bg-realizada' : 
-                                fila.Estado === 'Agendada' ? 'bg-agendada' : 'bg-alerta';
+            
+            // Lógica de colores para el badge
+            let claseEstado = 'bg-default';
+            if(estado.includes('Realizada')) claseEstado = 'bg-realizada';
+            else if(estado.includes('Agendada') || estado.includes('Enviada')) claseEstado = 'bg-agendada';
+            else if(estado.includes('Sin respuesta') || estado.includes('Alerta')) claseEstado = 'bg-alerta';
             
             tr.innerHTML = `
-                <td>${fila.Facultad || ''}</td>
-                <td style="font-weight:700">${fila.Asignatura || ''}</td>
-                <td>${fila.Docente || ''}</td>
-                <td><span class="badge ${claseEstado}">${fila.Estado || 'Sin datos'}</span></td>
-                <td>${fila.Planificacion || '—'}</td>
+                <td>${facultad}</td>
+                <td style="font-weight:700">${asignatura}</td>
+                <td>${docente}</td>
+                <td><span class="badge ${claseEstado}">${estado}</span></td>
+                <td>${plan}</td>
             `;
             body.appendChild(tr);
         });
     }
 
+    // Carga inicial
     cargarDatos();
-    // Refrescar cada 5 minutos automáticamente
+
+    // Refrescar cada 5 minutos (300.000 ms) para mantener los datos frescos
     setInterval(cargarDatos, 300000);
 </script>
 
 </body>
-</html>
 </html>
