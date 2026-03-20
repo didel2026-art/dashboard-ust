@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento Proyecto e-Learning UST 2026-1</title>
+    <style>
+        /* Mantenemos tu estilo original de la UST */
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+        
+        *{box-sizing:border-box;margin:0;padding:0}
+        
+        body{
+            font-family:'DM Sans', sans-serif;
+            background:#EEEAE0;
+            color:#1C1C1C;
+            padding:20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        :root{ 
+            --az:#1A3A6B; 
+            --am:#C8A951; 
+            --white:#fff; 
+            --borde:#DDD8C4; 
+        }
+        
+        .wrap {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .header{
+            background:var(--az);
+            color:#fff;
+            padding:25px;
+            border-radius:14px;
+            margin-bottom:20px;
+            border-bottom:4px solid var(--am);
+            text-align: left;
+        }
+
+        .h-ust{
+            font-size:10px;
+            font-weight:700;
+            color:var(--am);
+            letter-spacing:2px;
+            text-transform: uppercase;
+        }
+
+        .h-title{
+            font-size:22px;
+            font-weight:700;
+            margin-top: 5px;
+        }
+
+        .panel{
+            background:var(--white);
+            border-radius:11px;
+            padding:15px;
+            border:1px solid var(--borde);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .ptitle{
+            font-size:12px;
+            font-weight:700;
+            color:var(--az);
+            text-transform:uppercase;
+            margin-bottom:15px;
+            border-bottom:2px solid #F5EDD0;
+            padding-bottom:8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Contenedor del Excel */
+        .excel-frame {
+            width: 100%;
+            height: 750px; /* Ajusta este número si quieres que sea más largo */
+            border: none;
+            border-radius: 4px;
+        }
+
+        .footer{
+            text-align:center;
+            font-size:11px;
+            color:#999;
+            padding:20px;
+            margin-top: 10px;
+        }
+
+        @media(max-width:768px){
+            .h-title{ font-size: 18px; }
+            .excel-frame{ height: 500px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="header">
+        <div class="h-ust">UNIVERSIDAD SANTO TOMÁS</div>
+        <div class="h-title">Seguimiento Proyecto e-Learning 2026-1</div>
+        <div style="font-size:12px; opacity:0.7; margin-top:5px">Control de virtualización · Actualización Automática</div>
+    </div>
+
+    <div class="panel">
+        <div class="ptitle">
+            <span>Panel de Seguimiento en Vivo</span>
+            <span style="color: #27A06E;">● Conectado a Google Drive</span>
+        </div>
+        
+        <iframe class="excel-frame" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vR7KLTJADlIkNhjcC_V9X6a-eYiV30pDdOtlOPUsfvy1Z9AY-6TseqeFH-rfZjwtuSjjlQxAw0ym3Tm/pubhtml?widget=true&amp;headers=false"></iframe>
+    </div>
+
+    <div class="footer">
+        Actualizado al: <strong>20 de marzo, 2026</strong><br>
+        Los cambios realizados en el Excel original pueden tardar unos segundos en visualizarse aquí.
+    </div>
+</div>
+
+</body>
+</html>
