@@ -82,10 +82,9 @@
             font-weight:700;
             display:inline-block;
             text-align: center;
-            min-width: 90px;
+            min-width: 100px;
         }
 
-        /* Colores dinámicos para los estados */
         .bg-realizada{background:#EDF7EF; color:#1E6B2E}
         .bg-agendada{background:#F5EDD0; color:#7A5C00}
         .bg-alerta{background:#FDF0F0; color:#8B1A1A}
@@ -120,7 +119,7 @@
         </div>
     </div>
 
-    <div id="loading">Conectando con Google Drive...</div>
+    <div id="loading">Conectando con Google Drive y buscando datos...</div>
 
     <div id="dashboard-content" style="display:none">
         <div class="panel">
@@ -136,19 +135,17 @@
                             <th>Planificación</th>
                         </tr>
                     </thead>
-                    <tbody id="tabla-body">
-                        </tbody>
+                    <tbody id="tabla-body"></tbody>
                 </table>
             </div>
         </div>
         <div class="footer">
-            Los datos se actualizan automáticamente cada vez que editas tu Excel en Drive.
+            Los datos se actualizan automáticamente al editar el Excel en Drive.
         </div>
     </div>
 </div>
 
 <script>
-    // Tu enlace de Google Sheets en formato CSV
     const URL_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR7KLTJADlIkNhjcC_V9X6a-eYiV30pDdOtlOPUsfvy1Z9AY-6TseqeFH-rfZjwtuSjjlQxAw0ym3Tm/pub?output=csv';
 
     function cargarDatos() {
@@ -157,12 +154,16 @@
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
-                renderizarTabla(results.data);
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('dashboard-content').style.display = 'block';
+                if(results.data && results.data.length > 0) {
+                    renderizarTabla(results.data);
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('dashboard-content').style.display = 'block';
+                } else {
+                    document.getElementById('loading').textContent = "Se conectó, pero el archivo parece estar vacío.";
+                }
             },
             error: function(err) {
-                document.getElementById('loading').textContent = "Error al conectar con Drive. Revisa la publicación del Excel.";
+                document.getElementById('loading').textContent = "Error de conexión. Verifica que el Excel esté publicado.";
             }
         });
     }
@@ -172,39 +173,43 @@
         body.innerHTML = '';
         
         datos.forEach(fila => {
-            // Ajustamos los nombres de las columnas para que coincidan con tu Excel
-            const facultad = fila.Facultad || fila.FACULTAD || '';
-            const asignatura = fila.Asignatura || fila.ASIGNATURA || '';
-            const docente = fila.Docente || fila.DOCENTE || '';
-            const estado = fila.Estado || fila.ESTADO || 'Sin datos';
-            const plan = fila.Planificacion || fila.PLANIFICACION || '—';
+            // Buscador flexible de columnas (detecta nombres con/sin tildes o mayúsculas)
+            const getVal = (keys) => {
+                for (let k of keys) {
+                    if (fila[k] !== undefined) return fila[k];
+                }
+                return '';
+            };
 
-            if(!asignatura) return; // Ignora filas vacías
+            const facultad = getVal(['Facultad', 'FACULTAD', 'facultad']);
+            const asignatura = getVal(['Asignatura', 'ASIGNATURA', 'asignatura', 'Nombre']);
+            const docente = getVal(['Docente', 'DOCENTE', 'docente', 'Profesor']);
+            const estado = getVal(['Estado', 'ESTADO', 'estado', 'Estado Reunión']).trim();
+            const plan = getVal(['Planificacion', 'Planificación', 'PLANIFICACIÓN', 'PLANIFICACION', 'plan']);
+
+            if(!asignatura && !facultad) return; 
             
             const tr = document.createElement('tr');
             
-            // Lógica de colores para el badge
             let claseEstado = 'bg-default';
-            if(estado.includes('Realizada')) claseEstado = 'bg-realizada';
-            else if(estado.includes('Agendada') || estado.includes('Enviada')) claseEstado = 'bg-agendada';
-            else if(estado.includes('Sin respuesta') || estado.includes('Alerta')) claseEstado = 'bg-alerta';
+            let estNorm = estado.toLowerCase();
+            if(estNorm.includes('realizada')) claseEstado = 'bg-realizada';
+            else if(estNorm.includes('agendada') || estNorm.includes('enviada') || estNorm.includes('proceso')) claseEstado = 'bg-agendada';
+            else if(estNorm.includes('sin') || estNorm.includes('alerta') || estNorm.includes('pendiente')) claseEstado = 'bg-alerta';
             
             tr.innerHTML = `
                 <td>${facultad}</td>
                 <td style="font-weight:700">${asignatura}</td>
                 <td>${docente}</td>
-                <td><span class="badge ${claseEstado}">${estado}</span></td>
-                <td>${plan}</td>
+                <td><span class="badge ${claseEstado}">${estado || 'Pendiente'}</span></td>
+                <td>${plan || '—'}</td>
             `;
             body.appendChild(tr);
         });
     }
 
-    // Carga inicial
     cargarDatos();
-
-    // Refrescar cada 5 minutos (300.000 ms) para mantener los datos frescos
-    setInterval(cargarDatos, 300000);
+    setInterval(cargarDatos, 300000); // 5 min
 </script>
 
 </body>
