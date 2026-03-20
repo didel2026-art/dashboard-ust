@@ -6,103 +6,25 @@
     <title>Seguimiento Proyecto e-Learning UST 2026-1</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
-        /* ESTILOS INSTITUCIONALES UST */
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
         *{box-sizing:border-box;margin:0;padding:0}
-        
-        body{
-            font-family:'DM Sans', sans-serif;
-            background:#EEEAE0;
-            color:#1C1C1C;
-            padding:20px;
-        }
-
-        :root{ 
-            --az:#1A3A6B; 
-            --am:#C8A951; 
-            --ve:#27A06E; 
-            --ro:#D63031; 
-            --white:#fff; 
-            --borde:#DDD8C4; 
-        }
-
-        .wrap{max-width:1400px; margin:0 auto}
-
-        .header{
-            background:var(--az);
-            color:#fff;
-            padding:20px;
-            border-radius:14px;
-            margin-bottom:15px;
-            border-bottom:4px solid var(--am);
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-        }
-
-        .h-ust{font-size:10px; font-weight:700; color:var(--am); letter-spacing:2px}
-        .h-title{font-size:20px; font-weight:700}
-
-        .panel{
-            background:var(--white);
-            border-radius:11px;
-            padding:15px;
-            border:1px solid var(--borde);
-            margin-bottom:15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .ptitle{
-            font-size:11px;
-            font-weight:700;
-            color:var(--az);
-            text-transform:uppercase;
-            margin-bottom:12px;
-            border-bottom:2px solid #F5EDD0;
-            padding-bottom:5px;
-        }
-
-        table{width:100%; border-collapse:collapse; font-size:12px}
-        th{
-            text-align:left;
-            padding:10px;
-            background:#F8F6EE;
-            color:var(--az);
-            font-weight:700;
-            text-transform:uppercase;
-            font-size:10px;
-        }
-        td{padding:10px; border-bottom:1px solid #F0EDE0}
-
-        .badge{
-            padding:4px 12px;
-            border-radius:20px;
-            font-size:10px;
-            font-weight:700;
-            display:inline-block;
-            text-align: center;
-            min-width: 100px;
-        }
-
-        .bg-realizada{background:#EDF7EF; color:#1E6B2E}
-        .bg-agendada{background:#F5EDD0; color:#7A5C00}
-        .bg-alerta{background:#FDF0F0; color:#8B1A1A}
-        .bg-default{background:#F0F0F0; color:#666}
-
-        #loading{
-            text-align:center;
-            padding:50px;
-            font-weight:700;
-            color:var(--az);
-        }
-
-        .footer{
-            text-align: center;
-            font-size: 11px;
-            color: #999;
-            margin-top: 10px;
-        }
+        body{font-family:'DM Sans',sans-serif;background:#EEEAE0;color:#1C1C1C;padding:20px}
+        :root{ --az:#1A3A6B; --am:#C8A951; --ve:#27A06E; --ro:#D63031; --white:#fff; --borde:#DDD8C4; }
+        .wrap{max-width:1400px;margin:0 auto}
+        .header{background:var(--az);color:#fff;padding:20px;border-radius:14px;margin-bottom:15px;border-bottom:4px solid var(--am);display:flex;justify-content:space-between;align-items:center}
+        .h-ust{font-size:10px;font-weight:700;color:var(--am);letter-spacing:2px}
+        .h-title{font-size:20px;font-weight:700}
+        .panel{background:var(--white);border-radius:11px;padding:15px;border:1px solid var(--borde);margin-bottom:15px;box-shadow:0 2px 4px rgba(0,0,0,0.05)}
+        .ptitle{font-size:11px;font-weight:700;color:var(--az);text-transform:uppercase;margin-bottom:12px;border-bottom:2px solid #F5EDD0;padding-bottom:5px}
+        table{width:100%;border-collapse:collapse;font-size:12px}
+        th{text-align:left;padding:10px;background:#F8F6EE;color:var(--az);font-weight:700;text-transform:uppercase;font-size:10px}
+        td{padding:10px;border-bottom:1px solid #F0EDE0}
+        .badge{padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;display:inline-block;text-align:center;min-width:100px}
+        .bg-realizada{background:#EDF7EF;color:#1E6B2E}
+        .bg-agendada{background:#F5EDD0;color:#7A5C00}
+        .bg-alerta{background:#FDF0F0;color:#8B1A1A}
+        .bg-default{background:#F0F0F0;color:#666}
+        #loading{text-align:center;padding:50px;font-weight:700;color:var(--az)}
     </style>
 </head>
 <body>
@@ -114,12 +36,11 @@
             <div class="h-title">Seguimiento Proyecto e-Learning 2026-1</div>
         </div>
         <div style="text-align:right; font-size:11px; opacity:0.8">
-            Archivo: <strong>Reuniones_Proyecto2026-1</strong><br>
-            Sincronización Automática ●
+            Archivo: <strong>Reuniones_Proyecto2026-1</strong> ●
         </div>
     </div>
 
-    <div id="loading">Conectando con Google Drive y buscando datos...</div>
+    <div id="loading">Sincronizando con Google Drive...</div>
 
     <div id="dashboard-content" style="display:none">
         <div class="panel">
@@ -139,13 +60,11 @@
                 </table>
             </div>
         </div>
-        <div class="footer">
-            Los datos se actualizan automáticamente al editar el Excel en Drive.
-        </div>
     </div>
 </div>
 
 <script>
+    // ESTE ES EL LINK CORRECTO (CSV) PARA QUE EL CÓDIGO LEA DATOS
     const URL_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR7KLTJADlIkNhjcC_V9X6a-eYiV30pDdOtlOPUsfvy1Z9AY-6TseqeFH-rfZjwtuSjjlQxAw0ym3Tm/pub?output=csv';
 
     function cargarDatos() {
@@ -154,16 +73,9 @@
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
-                if(results.data && results.data.length > 0) {
-                    renderizarTabla(results.data);
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('dashboard-content').style.display = 'block';
-                } else {
-                    document.getElementById('loading').textContent = "Se conectó, pero el archivo parece estar vacío.";
-                }
-            },
-            error: function(err) {
-                document.getElementById('loading').textContent = "Error de conexión. Verifica que el Excel esté publicado.";
+                renderizarTabla(results.data);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('dashboard-content').style.display = 'block';
             }
         });
     }
@@ -173,43 +85,35 @@
         body.innerHTML = '';
         
         datos.forEach(fila => {
-            // Buscador flexible de columnas (detecta nombres con/sin tildes o mayúsculas)
-            const getVal = (keys) => {
-                for (let k of keys) {
-                    if (fila[k] !== undefined) return fila[k];
-                }
-                return '';
-            };
-
-            const facultad = getVal(['Facultad', 'FACULTAD', 'facultad']);
-            const asignatura = getVal(['Asignatura', 'ASIGNATURA', 'asignatura', 'Nombre']);
-            const docente = getVal(['Docente', 'DOCENTE', 'docente', 'Profesor']);
-            const estado = getVal(['Estado', 'ESTADO', 'estado', 'Estado Reunión']).trim();
-            const plan = getVal(['Planificacion', 'Planificación', 'PLANIFICACIÓN', 'PLANIFICACION', 'plan']);
+            // Buscamos los datos sin importar si el Excel tiene mayúsculas o minúsculas
+            const facultad = fila.Facultad || fila.FACULTAD || '';
+            const asignatura = fila.Asignatura || fila.ASIGNATURA || '';
+            const docente = fila.Docente || fila.DOCENTE || '';
+            const estado = (fila.Estado || fila.ESTADO || 'Sin datos').trim();
+            const plan = fila.Planificacion || fila.Planificación || fila.PLANIFICACION || '—';
 
             if(!asignatura && !facultad) return; 
             
             const tr = document.createElement('tr');
-            
-            let claseEstado = 'bg-default';
-            let estNorm = estado.toLowerCase();
-            if(estNorm.includes('realizada')) claseEstado = 'bg-realizada';
-            else if(estNorm.includes('agendada') || estNorm.includes('enviada') || estNorm.includes('proceso')) claseEstado = 'bg-agendada';
-            else if(estNorm.includes('sin') || estNorm.includes('alerta') || estNorm.includes('pendiente')) claseEstado = 'bg-alerta';
+            let clase = 'bg-default';
+            let e = estado.toLowerCase();
+            if(e.includes('realizada')) clase = 'bg-realizada';
+            else if(e.includes('agendada') || e.includes('proceso')) clase = 'bg-agendada';
+            else if(e.includes('alerta') || e.includes('respuesta')) clase = 'bg-alerta';
             
             tr.innerHTML = `
                 <td>${facultad}</td>
                 <td style="font-weight:700">${asignatura}</td>
                 <td>${docente}</td>
-                <td><span class="badge ${claseEstado}">${estado || 'Pendiente'}</span></td>
-                <td>${plan || '—'}</td>
+                <td><span class="badge ${clase}">${estado}</span></td>
+                <td>${plan}</td>
             `;
             body.appendChild(tr);
         });
     }
 
     cargarDatos();
-    setInterval(cargarDatos, 300000); // 5 min
+    setInterval(cargarDatos, 120000); // Se actualiza cada 2 minutos
 </script>
 
 </body>
