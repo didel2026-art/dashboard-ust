@@ -2,119 +2,50 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seguimiento Proyecto e-Learning UST 2026-1</title>
+    <title>Dashboard UST 2026</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
-        *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:'DM Sans',sans-serif;background:#EEEAE0;color:#1C1C1C;padding:20px}
-        :root{ --az:#1A3A6B; --am:#C8A951; --ve:#27A06E; --ro:#D63031; --white:#fff; --borde:#DDD8C4; }
-        .wrap{max-width:1400px;margin:0 auto}
-        .header{background:var(--az);color:#fff;padding:20px;border-radius:14px;margin-bottom:15px;border-bottom:4px solid var(--am);display:flex;justify-content:space-between;align-items:center}
-        .h-ust{font-size:10px;font-weight:700;color:var(--am);letter-spacing:2px}
-        .h-title{font-size:20px;font-weight:700}
-        .panel{background:var(--white);border-radius:11px;padding:15px;border:1px solid var(--borde);margin-bottom:15px;box-shadow:0 2px 4px rgba(0,0,0,0.05)}
-        .ptitle{font-size:11px;font-weight:700;color:var(--az);text-transform:uppercase;margin-bottom:12px;border-bottom:2px solid #F5EDD0;padding-bottom:5px}
-        table{width:100%;border-collapse:collapse;font-size:12px}
-        th{text-align:left;padding:10px;background:#F8F6EE;color:var(--az);font-weight:700;text-transform:uppercase;font-size:10px}
-        td{padding:10px;border-bottom:1px solid #F0EDE0}
-        .badge{padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;display:inline-block;text-align:center;min-width:100px}
-        .bg-realizada{background:#EDF7EF;color:#1E6B2E}
-        .bg-agendada{background:#F5EDD0;color:#7A5C00}
-        .bg-alerta{background:#FDF0F0;color:#8B1A1A}
-        .bg-default{background:#F0F0F0;color:#666}
-        #loading{text-align:center;padding:50px;font-weight:700;color:var(--az)}
+        body{font-family:sans-serif; background:#EEEAE0; padding:20px}
+        .header{background:#1A3A6B; color:white; padding:20px; border-radius:10px; border-bottom:4px solid #C8A951; margin-bottom:20px}
+        table{width:100%; border-collapse:collapse; background:white}
+        th{background:#F8F6EE; color:#1A3A6B; padding:10px; text-align:left; border-bottom:2px solid #EEE}
+        td{padding:10px; border-bottom:1px solid #EEE; font-size:14px}
+        .badge{padding:5px 10px; border-radius:15px; font-size:12px; font-weight:bold}
+        .Realizada{background:#27A06E; color:white}
+        .Agendada{background:#C8A951; color:white}
+        .Alerta{background:#D63031; color:white}
     </style>
 </head>
 <body>
-
-<div class="wrap">
     <div class="header">
-        <div>
-            <div class="h-ust">UNIVERSIDAD SANTO TOMÁS</div>
-            <div class="h-title">Seguimiento Proyecto e-Learning 2026-1</div>
-        </div>
-        <div style="text-align:right; font-size:11px; opacity:0.8">
-            Archivo: <strong>Reuniones_Proyecto2026-1</strong> ●
-        </div>
+        <h1>UNIVERSIDAD SANTO TOMÁS</h1>
+        <p>Seguimiento Proyecto e-Learning 2026-1</p>
     </div>
-
-    <div id="loading">Sincronizando con Google Drive...</div>
-
-    <div id="dashboard-content" style="display:none">
-        <div class="panel">
-            <div class="ptitle">Estado de Virtualización por Asignatura</div>
-            <div style="overflow-x:auto">
-                <table id="tabla-seguimiento">
-                    <thead>
-                        <tr>
-                            <th>Facultad</th>
-                            <th>Asignatura</th>
-                            <th>Docente</th>
-                            <th>Estado Reunión</th>
-                            <th>Planificación</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabla-body"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+    <div id="tabla-container">Cargando datos desde el Excel...</div>
 
 <script>
-    // ESTE ES EL LINK CORRECTO (CSV) PARA QUE EL CÓDIGO LEA DATOS
-    const URL_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR7KLTJADlIkNhjcC_V9X6a-eYiV30pDdOtlOPUsfvy1Z9AY-6TseqeFH-rfZjwtuSjjlQxAw0ym3Tm/pub?output=csv';
+    // PEGA AQUÍ TU NUEVO ENLACE QUE TERMINA EN output=csv
+    const miExcelCSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR7KLTJADlIkNhjcC_V9X6a-eYiV30pDdOtlOPUsfvy1Z9AY-6TseqeFH-rfZjwtuSjjlQxAw0ym3Tm/pub?output=csv';
 
-    function cargarDatos() {
-        Papa.parse(URL_CSV, {
-            download: true,
-            header: true,
-            skipEmptyLines: true,
-            complete: function(results) {
-                renderizarTabla(results.data);
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('dashboard-content').style.display = 'block';
-            }
-        });
-    }
-
-    function renderizarTabla(datos) {
-        const body = document.getElementById('tabla-body');
-        body.innerHTML = '';
-        
-        datos.forEach(fila => {
-            // Buscamos los datos sin importar si el Excel tiene mayúsculas o minúsculas
-            const facultad = fila.Facultad || fila.FACULTAD || '';
-            const asignatura = fila.Asignatura || fila.ASIGNATURA || '';
-            const docente = fila.Docente || fila.DOCENTE || '';
-            const estado = (fila.Estado || fila.ESTADO || 'Sin datos').trim();
-            const plan = fila.Planificacion || fila.Planificación || fila.PLANIFICACION || '—';
-
-            if(!asignatura && !facultad) return; 
-            
-            const tr = document.createElement('tr');
-            let clase = 'bg-default';
-            let e = estado.toLowerCase();
-            if(e.includes('realizada')) clase = 'bg-realizada';
-            else if(e.includes('agendada') || e.includes('proceso')) clase = 'bg-agendada';
-            else if(e.includes('alerta') || e.includes('respuesta')) clase = 'bg-alerta';
-            
-            tr.innerHTML = `
-                <td>${facultad}</td>
-                <td style="font-weight:700">${asignatura}</td>
-                <td>${docente}</td>
-                <td><span class="badge ${clase}">${estado}</span></td>
-                <td>${plan}</td>
-            `;
-            body.appendChild(tr);
-        });
-    }
-
-    cargarDatos();
-    setInterval(cargarDatos, 120000); // Se actualiza cada 2 minutos
+    Papa.parse(miExcelCSV, {
+        download: true,
+        header: true,
+        complete: function(res) {
+            let html = '<table><thead><tr><th>Facultad</th><th>Asignatura</th><th>Docente</th><th>Estado</th></tr></thead><tbody>';
+            res.data.forEach(fila => {
+                if(fila.Asignatura || fila.ASIGNATURA) {
+                    html += `<tr>
+                        <td>${fila.Facultad || ''}</td>
+                        <td><b>${fila.Asignatura || fila.ASIGNATURA || ''}</b></td>
+                        <td>${fila.Docente || ''}</td>
+                        <td><span class="badge ${fila.Estado}">${fila.Estado || 'S/D'}</span></td>
+                    </tr>`;
+                }
+            });
+            html += '</tbody></table>';
+            document.getElementById('tabla-container').innerHTML = html;
+        }
+    });
 </script>
-
 </body>
 </html>
