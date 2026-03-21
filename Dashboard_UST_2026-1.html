@@ -12,61 +12,46 @@
         :root {
             --azul-bg: #003865; --oro: #A88D4D; --fondo: #F5F1E9;
             --v-verde: #00A65A; --v-amarillo: #F39C12; --v-rojo: #DD4B39; --v-gris: #AAB7B8;
-            --borde: #DCD7CA;
         }
 
-        body { font-family: 'DM Sans', sans-serif; background: var(--fondo); margin: 0; padding: 15px; color: #333; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--fondo); margin: 0; padding: 15px; }
         
-        /* HEADER AZUL */
-        .header { 
-            background: var(--azul-bg); color: white; padding: 20px 30px; border-radius: 10px; 
-            display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;
-            position: relative; overflow: hidden;
-        }
-        .header h1 { margin: 5px 0; font-size: 22px; letter-spacing: 0.5px; }
+        /* HEADER */
+        .header { background: var(--azul-bg); color: white; padding: 20px 30px; border-radius: 10px; display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 4px solid var(--oro); }
+        .header h1 { margin: 5px 0; font-size: 20px; }
         .header p { margin: 0; font-size: 11px; text-transform: uppercase; opacity: 0.8; }
-        .header .badge-date { background: var(--oro); color: #333; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-block; margin-top: 10px; }
-        
+
+        /* BOTONES DE FACULTAD (FILTROS) */
+        .filter-container { display: flex; gap: 10px; margin: 15px 0; }
+        .filter-btn { background: white; border: 1px solid #DCD7CA; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 700; color: #555; font-size: 13px; transition: 0.3s; }
+        .filter-btn.active { background: var(--azul-bg); color: white; border-color: var(--azul-bg); }
+        .filter-btn:hover { background: #EEE; }
+
         /* KPI BOXES */
         .kpi-container { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
         .kpi-card { background: white; border: 2px solid #D1D9E0; border-radius: 12px; padding: 15px; text-align: center; }
         .kpi-card p { margin: 0; font-size: 10px; font-weight: 700; color: #777; text-transform: uppercase; }
-        .kpi-card .num { font-size: 36px; font-weight: 700; margin: 5px 0; color: var(--azul-bg); }
-        .kpi-card span { font-size: 11px; color: #999; }
-        
-        /* BORDES DE COLORES KPI */
-        .kpi-total { border-color: #2E5A88; }
-        .kpi-real { border-color: var(--v-verde); }
-        .kpi-agen { border-color: var(--v-amarillo); }
-        .kpi-alerta { border-color: var(--v-rojo); }
-        .kpi-val { border-color: #2E5A88; }
+        .kpi-card .num { font-size: 32px; font-weight: 700; margin: 5px 0; color: var(--azul-bg); }
+        .kpi-card.b-verde { border-color: var(--v-verde); }
+        .kpi-card.b-amarillo { border-color: var(--v-amarillo); }
+        .kpi-card.b-rojo { border-color: var(--v-rojo); }
 
         /* GRID PRINCIPAL */
-        .dashboard-grid { display: grid; grid-template-columns: 220px 1fr 280px; gap: 20px; }
-        .panel { background: white; border: 1px solid var(--borde); border-radius: 10px; padding: 15px; }
-        .panel-h2 { font-size: 11px; font-weight: 700; color: #2E5A88; border-bottom: 1px solid #EEE; padding-bottom: 8px; margin-bottom: 15px; text-transform: uppercase; }
+        .main-grid { display: grid; grid-template-columns: 200px 1fr 280px; gap: 15px; }
+        .panel { background: white; border: 1px solid #DCD7CA; border-radius: 10px; padding: 15px; }
+        .panel-h2 { font-size: 11px; font-weight: 700; color: var(--azul-bg); border-bottom: 1px solid #EEE; padding-bottom: 8px; margin-bottom: 12px; text-transform: uppercase; }
 
         /* ESCALAMIENTO */
-        .esc-card { background: #FFF9E6; border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 15px; }
-        .esc-card .days { font-size: 40px; font-weight: 700; color: #333; }
-        .step { display: flex; justify-content: space-between; padding: 8px 12px; border-radius: 6px; margin-bottom: 5px; font-size: 11px; font-weight: 700; border: 1px solid #EEE; }
-        .step.active { background: #FFEBEE; border-color: var(--v-rojo); color: var(--v-rojo); }
-        .step.ok { background: #E8F5E9; border-color: var(--v-verde); color: var(--v-verde); }
+        .esc-card { background: #FFF9E6; border-radius: 10px; padding: 15px; text-align: center; margin-bottom: 10px; }
+        .step { display: flex; justify-content: space-between; padding: 8px; border-radius: 6px; margin-bottom: 5px; font-size: 11px; font-weight: 700; border: 1px solid #EEE; }
+        .step.ok { background: #E8F5E9; color: var(--v-verde); border-color: var(--v-verde); }
+        .step.active { background: #FFEBEE; color: var(--v-rojo); border-color: var(--v-rojo); }
 
         /* TABLA */
         table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        th { text-align: left; padding: 10px; color: #2E5A88; font-weight: 700; background: #F9FBFD; }
-        td { padding: 10px; border-bottom: 1px solid #F0F0F0; }
-        .dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
-        .pill { padding: 4px 12px; border-radius: 12px; font-weight: 700; font-size: 10px; }
-
-        /* FOOTER TARJETAS */
-        .fac-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 20px; }
-        .fac-card { background: white; border: 1px solid var(--borde); border-radius: 10px; padding: 15px; border-bottom: 4px solid #CCC; }
-        .fac-card h4 { margin: 0; font-size: 11px; color: #2E5A88; }
-        .fac-card .f-num { font-size: 28px; font-weight: 700; margin: 10px 0; }
-        .progress-bg { height: 6px; background: #EEE; border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
-        .progress-fill { height: 100%; background: #2E5A88; transition: width 1s; }
+        th { text-align: left; padding: 8px; color: var(--azul-bg); border-bottom: 2px solid #EEE; }
+        td { padding: 10px 8px; border-bottom: 1px solid #F0F0F0; }
+        .dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
     </style>
 </head>
 <body>
@@ -75,137 +60,119 @@
     <div>
         <p>UNIVERSIDAD SANTO TOMÁS</p>
         <h1>Seguimiento Proyecto e-Learning UST 2026–1</h1>
-        <p style="text-transform:none; opacity:1">Control de virtualización · 4 facultades · 32 asignaturas</p>
-        <div class="badge-date">📍 Reuniones docentes · 19/03/2026</div>
     </div>
     <div style="text-align:right">
-        <p id="top-fecha">Viernes 20 de marzo 2026</p>
-        <div style="font-size: 45px; font-weight: 700; line-height: 1;">2</div>
-        <p>días desde correo (18/03)</p>
+        <p>Viernes 20 de marzo 2026</p>
+        <div style="font-size: 30px; font-weight: 700;">2</div>
+        <p>días desde correo</p>
     </div>
+</div>
+
+<div class="filter-container" id="filtros">
+    <button class="filter-btn active" onclick="filtrar('TODOS')">TODOS (32)</button>
+    <button class="filter-btn" onclick="filtrar('ING. CIVIL')">ING. CIVIL (15)</button>
+    <button class="filter-btn" onclick="filtrar('ING. COMERCIAL')">ING. COMERCIAL (10)</button>
+    <button class="filter-btn" onclick="filtrar('AGRONOMÍA')">AGRONOMÍA (5)</button>
+    <button class="filter-btn" onclick="filtrar('TRABAJO SOCIAL')">TRABAJO SOCIAL (2)</button>
 </div>
 
 <div class="kpi-container">
-    <div class="kpi-card kpi-total"><p>Total</p><div class="num" id="t-total">32</div><span>asignaturas</span></div>
-    <div class="kpi-card kpi-real"><p>Realizadas</p><div class="num" id="t-real" style="color:var(--v-verde)">14</div><span>de 32</span></div>
-    <div class="kpi-card kpi-agen"><p>Agendadas</p><div class="num" id="t-agen" style="color:var(--v-amarillo)">13</div><span>de 32</span></div>
-    <div class="kpi-card kpi-alerta"><p>Sin Respuesta</p><div class="num" id="t-alerta" style="color:var(--v-rojo)">1</div><span>requiere acción</span></div>
-    <div class="kpi-card kpi-val"><p>Planif. Validadas</p><div class="num" id="t-val">0</div><span>de 32</span></div>
+    <div class="kpi-card"><p>Total</p><div class="num" id="k-total">0</div><span>asignaturas</span></div>
+    <div class="kpi-card b-verde"><p>Realizadas</p><div class="num" id="k-real" style="color:var(--v-verde)">0</div><span id="p-real">0%</span></div>
+    <div class="kpi-card b-amarillo"><p>Agendadas</p><div class="num" id="k-agen" style="color:var(--v-amarillo)">0</div><span id="p-agen">0%</span></div>
+    <div class="kpi-card b-rojo"><p>Sin Respuesta</p><div class="num" id="k-alerta" style="color:var(--v-rojo)">0</div><span>acción requerida</span></div>
+    <div class="kpi-card"><p>Planif. Validadas</p><div class="num" id="k-val">0</div><span>de 32</span></div>
 </div>
 
-<div class="dashboard-grid">
-    <div>
-        <div class="panel">
-            <div class="panel-h2">Escalamiento</div>
-            <div class="esc-card">
-                <div class="days">2</div>
-                <p style="font-size:10px; margin:0">días desde correo<br>18/03/2026</p>
-            </div>
-            <div class="step active"><span>DI</span><span>1 docente(s)</span></div>
-            <div class="step ok"><span>JP</span><span>OK</span></div>
-            <div class="step ok"><span>Paulina</span><span>OK</span></div>
-            <div class="step ok"><span>DNE</span><span>OK</span></div>
-        </div>
+<div class="main-grid">
+    <div class="panel">
+        <div class="panel-h2">Escalamiento</div>
+        <div class="esc-card"><div style="font-size:30px;font-weight:700">2</div><p style="font-size:10px">días desde el correo</p></div>
+        <div class="step active"><span>DI</span><span>1 docente</span></div>
+        <div class="step ok"><span>JP</span><span>OK</span></div>
+        <div class="step ok"><span>Paulina</span><span>OK</span></div>
+        <div class="step ok"><span>DNE</span><span>OK</span></div>
     </div>
 
     <div class="panel">
         <div class="panel-h2">Estado por Asignatura</div>
-        <table id="tabla-proyectos">
-            <thead>
-                <tr><th>Asignatura</th><th>Docente</th><th>Reunión</th><th>Planificación</th></tr>
-            </thead>
-            <tbody id="body-tabla"></tbody>
+        <table>
+            <thead><tr><th>Asignatura</th><th>Docente</th><th>Reunión</th><th>Planificación</th></tr></thead>
+            <tbody id="tabla-body"></tbody>
         </table>
     </div>
 
     <div class="panel">
         <div class="panel-h2">Estado Reuniones</div>
-        <canvas id="chartDona"></canvas>
+        <canvas id="graficoDona"></canvas>
     </div>
 </div>
 
-<div class="fac-grid" id="container-facultades"></div>
-
 <script>
-    const URL_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR7KLTJADlIkNhjcC_V9X6a-eYiV30pDdOtlOPUsfvy1Z9AY-6TseqeFH-rfZjwtuSjjlQxAw0ym3Tm/pub?gid=1889016436&single=true&output=csv';
-    let chartObj = null;
+    const URL_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR7KLTJADlIkNhjcC_V9X6a-eYiV30pDdOtlOPUsfvy1Z9AY-6TseqeFH-rfZjwtuSjjlQxAw0ym3Tm/pub?output=csv';
+    let datosOriginales = [];
+    let chart = null;
 
     function cargar() {
         Papa.parse(URL_CSV, {
             download: true, header: false, skipEmptyLines: true,
-            complete: function(results) {
-                const data = results.data.slice(1);
-                renderizar(data);
+            complete: function(res) {
+                datosOriginales = res.data.slice(1);
+                filtrar('TODOS');
             }
         });
     }
 
-    function renderizar(data) {
-        const total = data.length;
-        const real = data.filter(f => (f[3]||'').toLowerCase().includes('realizada')).length;
-        const agen = data.filter(f => (f[3]||'').toLowerCase().includes('agendada')).length;
-        const alert = data.filter(f => (f[3]||'').toLowerCase().includes('pendiente') || (f[3]||'').toLowerCase().includes('sin')).length;
+    function filtrar(facultad, btn) {
+        // Estética de botones
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        if(!btn) { 
+            const botones = document.querySelectorAll('.filter-btn');
+            botones.forEach(b => { if(b.innerText.includes(facultad)) b.classList.add('active'); });
+        } else { btn.classList.add('active'); }
+
+        const filtrados = facultad === 'TODOS' ? datosOriginales : datosOriginales.filter(f => (f[0]||'').toUpperCase() === facultad);
+        actualizar(filtrados);
+    }
+
+    function actualizar(datos) {
+        const total = datos.length;
+        const real = datos.filter(f => (f[3]||'').toLowerCase().includes('realizada')).length;
+        const agen = datos.filter(f => (f[3]||'').toLowerCase().includes('agendada')).length;
+        const alert = datos.filter(f => (f[3]||'').toLowerCase().includes('pendiente') || (f[3]||'').toLowerCase().includes('sin')).length;
         const noInicia = total - (real + agen + alert);
 
-        document.getElementById('t-total').innerText = total;
-        document.getElementById('t-real').innerText = real;
-        document.getElementById('t-agen').innerText = agen;
-        document.getElementById('t-alerta').innerText = alert;
+        document.getElementById('k-total').innerText = total;
+        document.getElementById('k-real').innerText = real;
+        document.getElementById('k-agen').innerText = agen;
+        document.getElementById('k-alerta').innerText = alert;
+        document.getElementById('p-real').innerText = Math.round((real/total)*100) + "%";
+        document.getElementById('p-agen').innerText = Math.round((agen/total)*100) + "%";
 
-        // Tabla
-        const body = document.getElementById('body-tabla');
+        const body = document.getElementById('tabla-body');
         body.innerHTML = '';
-        data.forEach(f => {
+        datos.forEach(f => {
             const tr = document.createElement('tr');
             const est = (f[3]||'').toLowerCase();
-            let color = 'var(--v-gris)';
-            if(est.includes('realizada')) color = 'var(--v-verde)';
-            else if(est.includes('agendada')) color = 'var(--v-amarillo)';
-            else if(est.includes('pendiente')) color = 'var(--v-rojo)';
+            let c = 'var(--v-gris)';
+            if(est.includes('realizada')) c = 'var(--v-verde)';
+            else if(est.includes('agendada')) c = 'var(--v-amarillo)';
+            else if(est.includes('pendiente')) c = 'var(--v-rojo)';
 
-            tr.innerHTML = `
-                <td>${f[1]}</td>
-                <td style="color:#999">${f[2]}</td>
-                <td><span class="dot" style="background:${color}"></span>${f[3]}</td>
-                <td><span class="pill" style="background:#E1F5FE; color:#01579B">${f[4] || 'Pendiente'}</span></td>
-            `;
+            tr.innerHTML = `<td>${f[1]}</td><td style="color:#888">${f[2]}</td><td><span class="dot" style="background:${c}"></span>${f[3]}</td><td>${f[4] || 'Pendiente'}</td>`;
             body.appendChild(tr);
         });
 
-        // Tarjetas Facultades
-        const facs = ['ING. CIVIL', 'ING. COMERCIAL', 'AGRONOMÍA', 'TRABAJO SOCIAL'];
-        const fContainer = document.getElementById('container-facultades');
-        fContainer.innerHTML = '';
-        facs.forEach(nom => {
-            const fData = data.filter(d => (d[0]||'').toUpperCase() === nom);
-            const fTotal = fData.length;
-            const fReal = fData.filter(d => (d[3]||'').toLowerCase().includes('realizada')).length;
-            const perc = fTotal > 0 ? Math.round((fReal/fTotal)*100) : 0;
-            
-            fContainer.innerHTML += `
-                <div class="fac-card">
-                    <h4>${nom}</h4>
-                    <div class="f-num">${fTotal} <span>asignaturas</span></div>
-                    <div class="progress-bg"><div class="progress-fill" style="width:${perc}%"></div></div>
-                    <div style="font-size:11px; font-weight:700">${fReal} reuniones · ${perc}%</div>
-                </div>
-            `;
-        });
-
-        // Gráfico
-        const ctx = document.getElementById('chartDona').getContext('2d');
-        if(chartObj) chartObj.destroy();
-        chartObj = new Chart(ctx, {
+        const ctx = document.getElementById('graficoDona').getContext('2d');
+        if(chart) chart.destroy();
+        chart = new Chart(ctx, {
             type: 'doughnut',
-            data: {
-                labels: ['Realizadas', 'Agendadas', 'Sin Resp.', 'No inicia'],
-                datasets: [{ data: [real, agen, alert, noInicia], backgroundColor: ['#00A65A', '#F39C12', '#DD4B39', '#AAB7B8'] }]
-            },
-            options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
+            data: { labels: ['Realizadas', 'Agendadas', 'Sin Resp.', 'Pendiente'], datasets: [{ data: [real, agen, alert, noInicia], backgroundColor: ['#00A65A', '#F39C12', '#DD4B39', '#AAB7B8'] }] },
+            options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } } }
         });
     }
+
     cargar();
-    setInterval(cargar, 60000);
 </script>
 </body>
 </html>
