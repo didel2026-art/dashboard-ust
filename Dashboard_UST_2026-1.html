@@ -3,109 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard e-Learning UST 2026</title>
+    <title>Dashboard UST 2026</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
         
-        :root { --azul: #1A3A6B; --oro: #C8A951; --fondo: #EEEAE0; --blanco: #ffffff; }
-        
-        body { font-family: 'DM Sans', sans-serif; background: var(--fondo); margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 1200px; margin: auto; }
-        
+        :root { 
+            --azul: #003865; --oro: #A88D4D; --fondo: #F4F7F9; 
+            --verde: #00A65A; --amarillo: #F39C12; --rojo: #DD4B39; --gris: #AAB7B8;
+        }
+
+        body { font-family: 'DM Sans', sans-serif; background: var(--fondo); margin: 0; padding: 20px; }
+        .container { max-width: 1400px; margin: auto; }
+
         /* HEADER */
         .header { 
-            background: var(--azul); color: white; padding: 30px; border-radius: 15px; 
-            border-bottom: 5px solid var(--oro); margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background: var(--azul); color: white; padding: 25px; border-radius: 10px; 
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+            border-bottom: 4px solid var(--oro);
         }
-        .header h1 { margin: 0; font-size: 24px; letter-spacing: 1px; }
-        .header p { margin: 5px 0 0; opacity: 0.8; font-size: 14px; }
+        .header h1 { margin: 0; font-size: 22px; }
+        .header .fecha { text-align: right; font-size: 14px; opacity: 0.8; }
+
+        /* KPI CARDS */
+        .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 20px; }
+        .kpi-card { background: white; padding: 20px; border-radius: 10px; text-align: center; border: 1px solid #ddd; }
+        .kpi-card h3 { margin: 0; font-size: 11px; text-transform: uppercase; color: #777; }
+        .kpi-card .number { font-size: 32px; font-weight: 700; margin: 10px 0; color: var(--azul); }
+        .kpi-card.realizadas { border-top: 5px solid var(--verde); }
+        .kpi-card.agendadas { border-top: 5px solid var(--amarillo); }
+        .kpi-card.alerta { border-top: 5px solid var(--rojo); }
+
+        /* FILTROS */
+        .filters { display: flex; gap: 10px; margin-bottom: 20px; }
+        .filter-btn { 
+            background: white; border: 1px solid #ddd; padding: 10px 20px; 
+            border-radius: 8px; cursor: pointer; font-weight: 500; font-size: 13px;
+        }
+        .filter-btn.active { background: var(--azul); color: white; border-color: var(--azul); }
+
+        /* MAIN CONTENT GRID */
+        .main-grid { display: grid; grid-template-columns: 250px 1fr 300px; gap: 20px; }
+        .panel { background: white; border-radius: 10px; padding: 20px; border: 1px solid #ddd; }
+        .panel-title { font-size: 12px; font-weight: 700; color: var(--azul); margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
 
         /* TABLA */
-        .card { background: var(--blanco); border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; min-width: 800px; }
-        th { background: #f8f9fa; color: var(--azul); padding: 15px 10px; text-align: left; font-size: 12px; text-transform: uppercase; border-bottom: 2px solid var(--fondo); }
-        td { padding: 15px 10px; border-bottom: 1px solid #eee; font-size: 14px; }
-        
-        /* ESTADOS (BADGES) */
-        .badge { 
-            padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; 
-            display: inline-block; text-transform: capitalize;
-        }
-        .nuevo { background: #e3f2fd; color: #1976d2; border: 1px solid #bbdefb; } /* Azul claro */
-        .antiguo { background: #f5f5f5; color: #616161; border: 1px solid #e0e0e0; } /* Gris */
-        .pendiente { background: #fff3e0; color: #e65100; border: 1px solid #ffe0b2; } /* Naranja */
-        .error { background: #ffebee; color: #c62828; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { text-align: left; padding: 10px; background: #f9f9f9; color: var(--azul); }
+        td { padding: 12px 10px; border-bottom: 1px solid #eee; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px; }
 
-        tr:hover { background-color: #fcfaf5; }
-        .facultad-tag { color: var(--oro); font-weight: bold; font-size: 11px; }
+        /* ESCALAMIENTO LADO IZQUIERDO */
+        .esc-item { border-left: 4px solid var(--rojo); padding: 10px; background: #fff5f5; margin-bottom: 10px; border-radius: 5px; font-size: 12px; }
+
+        #loading { text-align: center; padding: 100px; font-size: 20px; font-weight: bold; color: var(--azul); }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="main-app" style="display:none;">
     <div class="header">
-        <h1>UNIVERSIDAD SANTO TOMÁS</h1>
-        <p>Seguimiento Semanal — Proyecto e-Learning 2026-1</p>
+        <div>
+            <p style="font-size: 10px; margin:0; letter-spacing: 1px;">UNIVERSIDAD SANTO TOMÁS</p>
+            <h1>Seguimiento Proyecto e-Learning UST 2026–1</h1>
+            <span id="sub-info" style="font-size:12px; opacity:0.8;"></span>
+        </div>
+        <div class="fecha">
+            <div id="current-date"></div>
+            <div style="font-size:24px; font-weight:bold;">2</div>
+            <div style="font-size:10px;">días desde correo (18/03)</div>
+        </div>
     </div>
 
-    <div class="card">
-        <div id="loading" style="text-align:center; padding:40px;">Cargando datos del proyecto...</div>
-        <div id="tabla-container"></div>
+    <div class="stats-grid">
+        <div class="kpi-card"><h3>Total</h3><div class="number" id="kpi-total">0</div><span>asignaturas</span></div>
+        <div class="kpi-card realizadas"><h3>Realizadas</h3><div class="number" id="kpi-real">0</div><span id="perc-real">0%</span></div>
+        <div class="kpi-card agendadas"><h3>Agendadas</h3><div class="number" id="kpi-agen">0</div><span id="perc-agen">0%</span></div>
+        <div class="kpi-card alerta"><h3>Sin Respuesta</h3><div class="number" style="color:var(--rojo);" id="kpi-alerta">0</div><span>requiere acción</span></div>
+        <div class="kpi-card" style="border-top:5px solid var(--azul);"><h3>Validadas</h3><div class="number" id="kpi-val">0</div><span>de 32</span></div>
+    </div>
+
+    <div class="filters" id="filter-container">
+        <button class="filter-btn active" onclick="filtrar('todos')">Todos</button>
+    </div>
+
+    <div class="main-grid">
+        <div class="panel">
+            <div class="panel-title">ESCALAMIENTO</div>
+            <div class="esc-item"><strong>DI</strong> 19/03 <br> 1 docente(s) pendiente</div>
+            <div class="esc-item" style="border-color:var(--verde); background:#f0fff4;"><strong>JP</strong> OK</div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">ESTADO POR ASIGNATURA</div>
+            <table id="data-table">
+                <thead>
+                    <tr><th>ASIGNATURA</th><th>DOCENTE</th><th>REUNIÓN</th><th>PLANIFICACIÓN</th></tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+            </table>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">ESTADO REUNIONES</div>
+            <canvas id="myChart"></canvas>
+        </div>
     </div>
 </div>
 
+<div id="loading">Sincronizando Dashboard...</div>
+
 <script>
     const URL_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR7KLTJADlIkNhjcC_V9X6a-eYiV30pDdOtlOPUsfvy1Z9AY-6TseqeFH-rfZjwtuSjjlQxAw0ym3Tm/pub?gid=1889016436&single=true&output=csv';
+    let rawData = [];
+    let myChart = null;
 
-    function cargarDatos() {
+    function init() {
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        
         Papa.parse(URL_CSV, {
-            download: true,
-            header: false,
-            skipEmptyLines: true,
+            download: true, header: false, skipEmptyLines: true,
             complete: function(results) {
-                const filas = results.data;
-                if(filas.length < 2) return;
-
+                rawData = results.data.slice(1); // Quitamos cabecera
                 document.getElementById('loading').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
                 
-                let html = '<table><thead><tr>';
-                html += '<th>Facultad</th>';
-                html += '<th>Asignatura</th>';
-                html += '<th>Docente</th>';
-                html += '<th>Estado/Fmt</th>';
-                html += '<th>Diseñador (JP)</th>';
-                html += '</tr></thead><tbody>';
-
-                // Empezamos desde la fila 2 para saltar encabezados del Excel
-                for(let i = 1; i < filas.length; i++) {
-                    const f = filas[i];
-                    if(!f[1]) continue; // Si no hay asignatura, saltar
-
-                    // Limpieza de estado para el color
-                    const est = (f[3] || '').toLowerCase().trim();
-                    let claseBadge = 'badge';
-                    if(est.includes('nuevo')) claseBadge += ' nuevo';
-                    else if(est.includes('antiguo')) claseBadge += ' antiguo';
-                    else if(est.includes('pendiente')) claseBadge += ' pendiente';
-
-                    html += `<tr>
-                        <td><span class="facultad-tag">${f[0] || '—'}</span></td>
-                        <td><strong>${f[1]}</strong></td>
-                        <td>${f[2] || '—'}</td>
-                        <td><span class="${claseBadge}">${f[3] || 'S/D'}</span></td>
-                        <td>${f[4] || '—'}</td>
-                    </tr>`;
-                }
-                html += '</tbody></table>';
-                document.getElementById('tabla-container').innerHTML = html;
+                renderFilters();
+                actualizarDashboard(rawData);
             }
         });
     }
 
-    cargarDatos();
-    setInterval(cargarDatos, 120000); // Actualiza cada 2 min
-</script>
+    function renderFilters() {
+        const facultades = [...new Set(rawData.map(f => f[0]))].filter(f => f);
+        const container = document.getElementById('filter-container');
+        facultades.forEach(fac => {
+            const btn = document.createElement('button');
+            btn.className = 'filter-btn';
+            btn.innerText = fac;
+            btn.onclick = () => filtrar(fac, btn);
+            container.appendChild(btn);
+        });
+    }
 
+    function filtrar(valor, btn) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        if(btn) btn.classList.add('active'); else document.querySelector('.filter-btn').classList.add('active');
+        
+        const filtrados = valor === 'todos' ? rawData : rawData.filter(f => f[0] === valor);
+        actualizarDashboard(filtrados);
+    }
+
+    function actualizarDashboard(datos) {
+        const total = datos.length;
+        const real = datos.filter(f => (f[3]||'').toLowerCase().includes('realizada') || (f[3]||'').toLowerCase().includes('antiguo')).length;
+        const agen = datos.filter(f => (f[3]||'').toLowerCase().includes('agendada') || (f[3]||'').toLowerCase().includes('nuevo')).length;
+        const alert = datos.filter(f => (f[3]||'').toLowerCase().includes('pendiente') || (f[3]||'').toLowerCase().includes('sin')).length;
+        const noInicia = total - (real + agen + alert);
+
+        // Actualizar KPIs
+        document.getElementById('kpi-total').innerText = total;
+        document.getElementById('kpi-real').innerText = real;
+        document.getElementById('kpi-agen').innerText = agen;
+        document.getElementById('kpi-alerta').innerText = alert;
+        document.getElementById('perc-real').innerText = Math.round((real/total)*100) + "%";
+        
+        // Render Tabla
+        const body = document.getElementById('table-body');
+        body.innerHTML = '';
+        datos.forEach(f => {
+            const tr = document.createElement('tr');
+            const est = (f[3]||'').toLowerCase();
+            let dot = '<span class="status-dot" style="background:var(--gris)"></span>';
+            if(est.includes('realizada') || est.includes('antiguo')) dot = '<span class="status-dot" style="background:var(--verde)"></span>';
+            if(est.includes('agendada') || est.includes('nuevo')) dot = '<span class="status-dot" style="background:var(--amarillo)"></span>';
+            if(est.includes('pendiente')) dot = '<span class="status-dot" style="background:var(--rojo)"></span>';
+
+            tr.innerHTML = `<td>${f[1]}</td><td>${f[2]}</td><td>${dot} ${f[3]}</td><td>${f[4] || 'No inicia'}</td>`;
+            body.appendChild(tr);
+        });
+
+        updateChart(real, agen, alert, noInicia);
+    }
+
+    function updateChart(r, a, al, n) {
+        const ctx = document.getElementById('myChart').getContext('2d');
+        if(myChart) myChart.destroy();
+        myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Realizadas', 'Agendadas', 'Sin Resp.', 'No inicia'],
+                datasets: [{
+                    data: [r, a, al, n],
+                    backgroundColor: ['#00A65A', '#F39C12', '#DD4B39', '#AAB7B8']
+                }]
+            },
+            options: { plugins: { legend: { position: 'bottom' } } }
+        });
+    }
+
+    init();
+</script>
 </body>
 </html>
