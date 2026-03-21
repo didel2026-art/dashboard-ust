@@ -2,153 +2,113 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Integral UST 2026-1</title>
+    <title>Dashboard UST 2026 - Gestión Real</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+        :root { --azul: #003865; --oro: #A88D4D; --fondo: #F5F1E9; --v: #00A65A; --a: #F39C12; --r: #DD4B39; --g: #AAB7B8; }
         
-        :root {
-            --azul-ust: #003865; --oro-ust: #A88D4D; --fondo: #F8F9FA;
-            --verde: #00A65A; --amarillo: #F39C12; --rojo: #DD4B39; --gris: #AAB7B8;
-            --borde: #E1E8ED;
-        }
-
-        body { font-family: 'DM Sans', sans-serif; background: var(--fondo); margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 1400px; margin: auto; }
-
-        /* HEADER */
-        .header { 
-            background: var(--azul-ust); color: white; padding: 25px 35px; border-radius: 12px; 
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
-            border-bottom: 5px solid var(--oro-ust); box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .header h1 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-        .header p { margin: 5px 0 0; font-size: 12px; text-transform: uppercase; opacity: 0.8; letter-spacing: 1px; }
-
-        /* FILTROS (BOTONES DE FACULTAD) */
-        .filter-section { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-        .filter-label { font-size: 12px; font-weight: 700; color: var(--azul-ust); text-transform: uppercase; }
-        .btn-fac { 
-            background: white; border: 1px solid var(--borde); padding: 10px 20px; 
-            border-radius: 8px; cursor: pointer; font-weight: 700; color: #555; font-size: 13px;
-            transition: all 0.2s ease;
-        }
-        .btn-fac.active { background: var(--azul-ust); color: white; border-color: var(--azul-ust); box-shadow: 0 4px 8px rgba(0,56,101,0.2); }
-        .btn-fac:hover:not(.active) { background: #f0f0f0; }
-
-        /* KPI GRID */
-        .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 25px; }
-        .kpi-card { background: white; border-radius: 12px; padding: 20px; text-align: center; border: 1px solid var(--borde); border-top-width: 6px; }
-        .kpi-card p { margin: 0; font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; }
-        .kpi-card .value { font-size: 36px; font-weight: 700; margin: 10px 0; color: var(--azul-ust); }
+        body { font-family: 'DM Sans', sans-serif; background: var(--fondo); margin: 0; padding: 15px; font-size: 14px; }
+        .header { background: var(--azul); color: white; padding: 20px 30px; border-radius: 12px; display: flex; justify-content: space-between; border-bottom: 5px solid var(--oro); margin-bottom: 15px; }
         
-        .k-total { border-top-color: #2E5A88; }
-        .k-real { border-top-color: var(--verde); }
-        .k-agen { border-top-color: var(--amarillo); }
-        .k-alerta { border-top-color: var(--rojo); }
-        .k-val { border-top-color: var(--oro-ust); }
+        /* FILTROS */
+        .filter-bar { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+        .btn-f { background: white; border: 1px solid #D1D9E0; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 700; color: #555; }
+        .btn-f.active { background: var(--azul); color: white; border-color: var(--azul); }
 
-        /* MAIN CONTENT */
-        .main-grid { display: grid; grid-template-columns: 240px 1fr 320px; gap: 20px; }
-        .panel { background: white; border: 1px solid var(--borde); border-radius: 12px; padding: 20px; }
-        .panel-h3 { font-size: 12px; font-weight: 700; color: var(--azul-ust); border-bottom: 1px solid #F0F0F0; padding-bottom: 12px; margin-bottom: 15px; text-transform: uppercase; }
+        /* KPIs */
+        .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 15px; }
+        .kpi { background: white; border-radius: 10px; padding: 15px; text-align: center; border: 1px solid #D1D9E0; border-top: 5px solid var(--azul); }
+        .kpi p { margin: 0; font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; }
+        .kpi .num { font-size: 28px; font-weight: 700; margin: 5px 0; }
 
-        /* ESCALAMIENTO */
-        .esc-card { background: #FFF9E6; border: 1px solid #FFE082; border-radius: 10px; padding: 15px; text-align: center; margin-bottom: 15px; }
-        .esc-step { display: flex; justify-content: space-between; padding: 10px; border-radius: 8px; margin-bottom: 8px; font-size: 12px; font-weight: 700; border: 1px solid #EEE; }
-        .esc-step.active { background: #FFEBEE; color: var(--rojo); border-color: #FFCDD2; }
-        .esc-step.ok { background: #E8F5E9; color: var(--verde); border-color: #C8E6C9; }
-
-        /* TABLA */
-        table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th { text-align: left; padding: 12px; background: #F8FAFC; color: var(--azul-ust); font-weight: 700; }
-        td { padding: 12px; border-bottom: 1px solid #F1F1F1; }
-        .status-pill { padding: 4px 10px; border-radius: 15px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; }
-        .dot { height: 8px; width: 8px; border-radius: 50%; margin-right: 6px; display: inline-block; }
+        /* TABLA Y GRÁFICO */
+        .main-grid { display: grid; grid-template-columns: 220px 1fr 280px; gap: 15px; }
+        .panel { background: white; border-radius: 10px; padding: 15px; border: 1px solid #D1D9E0; overflow: hidden; }
+        .panel h3 { font-size: 11px; text-transform: uppercase; color: var(--azul); border-bottom: 1px solid #EEE; padding-bottom: 10px; margin-top: 0; }
+        
+        table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        th { text-align: left; padding: 8px; background: #F9FBFD; }
+        td { padding: 8px; border-bottom: 1px solid #F0F0F0; }
+        
+        .pill { padding: 3px 8px; border-radius: 10px; font-weight: 700; font-size: 10px; display: inline-block; }
+        .pill-r { background: #FFEBEE; color: var(--r); }
+        .pill-a { background: #FFF3E0; color: var(--a); }
+        .pill-v { background: #E8F5E9; color: var(--v); }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <div>
-            <p>Universidad Santo Tomás</p>
-            <h1>Seguimiento e-Learning 2026–1</h1>
-        </div>
-        <div style="text-align:right">
-            <div style="font-size: 14px; opacity: 0.9;" id="fecha-actual"></div>
-            <div style="font-size: 32px; font-weight: 700;">2 <span style="font-size:14px; font-weight:400;">días transcurridos</span></div>
+<div class="header">
+    <div>
+        <p>UNIVERSIDAD SANTO TOMÁS</p>
+        <h1>Seguimiento e-Learning 2026-1</h1>
+    </div>
+    <div style="text-align:right">
+        <div style="font-size:32px; font-weight:700">2</div>
+        <p>días desde correo (18/03)</p>
+    </div>
+</div>
+
+<div class="filter-bar" id="filtros">
+    <button class="btn-f active" onclick="filtrar('TODOS', this)">TODOS (32)</button>
+</div>
+
+<div class="kpi-grid">
+    <div class="kpi"> <p>Total</p> <div class="num" id="k-total">0</div> </div>
+    <div class="kpi" style="border-top-color: var(--v)"> <p>Realizadas</p> <div class="num" id="k-real" style="color:var(--v)">0</div> </div>
+    <div class="kpi" style="border-top-color: var(--a)"> <p>Agendadas</p> <div class="num" id="k-agen" style="color:var(--a)">0</div> </div>
+    <div class="kpi" style="border-top-color: var(--r)"> <p>Sin Respuesta</p> <div class="num" id="k-alerta" style="color:var(--r)">0</div> </div>
+    <div class="kpi"> <p>Validadas</p> <div class="num" id="k-val">0</div> </div>
+</div>
+
+<div class="main-grid">
+    <div class="panel">
+        <h3>Escalamiento</h3>
+        <div id="esc-status" style="padding:10px; border-radius:8px; font-weight:700; text-align:center; margin-bottom:10px;"></div>
+        <div style="font-size:11px; color:#666">
+            <p>🔴 <strong>Crítico:</strong> Sin respuesta +3d</p>
+            <p>🟡 <strong>Seguimiento:</strong> Agendadas</p>
         </div>
     </div>
 
-    <div class="filter-section" id="filtro-facultades">
-        <span class="filter-label">Facultad:</span>
-        <button class="btn-fac active" onclick="filtrar('TODOS', this)">Ver Todas</button>
+    <div class="panel">
+        <h3>Listado de Asignaturas</h3>
+        <table>
+            <thead><tr><th>Asignatura</th><th>Docente</th><th>Estado Reunión</th></tr></thead>
+            <tbody id="t-body"></tbody>
+        </table>
     </div>
 
-    <div class="kpi-grid">
-        <div class="kpi-card k-total"><p>Asignaturas</p><div class="value" id="k-total">0</div><span>Total</span></div>
-        <div class="kpi-card k-real"><p>Reuniones</p><div class="value" id="k-real" style="color:var(--verde)">0</div><span>Realizadas</span></div>
-        <div class="kpi-card k-agen"><p>Reuniones</p><div class="value" id="k-agen" style="color:var(--amarillo)">0</div><span>Agendadas</span></div>
-        <div class="kpi-card k-alerta"><p>Sin Respuesta</p><div class="value" id="k-alerta" style="color:var(--rojo)">0</div><span>Acción Req.</span></div>
-        <div class="kpi-card k-val"><p>Planificaciones</p><div class="value" id="k-val">0</div><span>Validadas</span></div>
-    </div>
-
-    <div class="main-grid">
-        <div class="panel">
-            <div class="panel-h3">Escalamiento</div>
-            <div class="esc-card">
-                <div style="font-size:28px; font-weight:700">Alerta</div>
-                <p style="font-size:10px; margin:0">Reuniones Pendientes</p>
-            </div>
-            <div class="esc-step active"><span>DI</span><span id="esc-di">---</span></div>
-            <div class="esc-step ok"><span>JP</span><span>OK</span></div>
-            <div class="esc-step ok"><span>DNE</span><span>OK</span></div>
-        </div>
-
-        <div class="panel">
-            <div class="panel-h3">Estado Detallado por Asignatura</div>
-            <table id="tabla-proyectos">
-                <thead>
-                    <tr><th>Asignatura</th><th>Docente</th><th>Estado Reunión</th><th>Planificación</th></tr>
-                </thead>
-                <tbody id="body-tabla"></tbody>
-            </table>
-        </div>
-
-        <div class="panel">
-            <div class="panel-h3">Resumen de Gestión</div>
-            <canvas id="chartDona" height="250"></canvas>
-        </div>
+    <div class="panel">
+        <h3>Resumen de Estados</h3>
+        <canvas id="chart" height="250"></canvas>
     </div>
 </div>
 
 <script>
-    const URL_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR7KLTJADlIkNhjcC_V9X6a-eYiV30pDdOtlOPUsfvy1Z9AY-6TseqeFH-rfZjwtuSjjlQxAw0ym3Tm/pub?output=csv';
-    let database = [];
+    const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR7KLTJADlIkNhjcC_V9X6a-eYiV30pDdOtlOPUsfvy1Z9AY-6TseqeFH-rfZjwtuSjjlQxAw0ym3Tm/pub?output=csv';
+    let rawData = [];
     let myChart = null;
 
     function init() {
-        document.getElementById('fecha-actual').innerText = new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
-        
-        Papa.parse(URL_CSV, {
+        Papa.parse(URL, {
             download: true, header: false, skipEmptyLines: true,
             complete: function(results) {
-                database = results.data.slice(1);
-                generarBotones();
-                filtrar('TODOS', document.querySelector('.btn-fac.active'));
+                rawData = results.data.slice(1);
+                actualizarFiltros();
+                filtrar('TODOS', document.querySelector('.btn-f'));
             }
         });
     }
 
-    function generarBotones() {
-        const facs = [...new Set(database.map(f => f[0]))].filter(f => f);
-        const container = document.getElementById('filtro-facultades');
+    function actualizarFiltros() {
+        const facs = [...new Set(rawData.map(f => f[0]))].filter(f => f);
+        const container = document.getElementById('filtros');
         facs.forEach(fac => {
             const btn = document.createElement('button');
-            btn.className = 'btn-fac';
+            btn.className = 'btn-f';
             btn.innerText = fac;
             btn.onclick = () => filtrar(fac, btn);
             container.appendChild(btn);
@@ -156,54 +116,52 @@
     }
 
     function filtrar(fac, btn) {
-        document.querySelectorAll('.btn-fac').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.btn-f').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const filtrados = fac === 'TODOS' ? database : database.filter(f => f[0] === fac);
-        renderizar(filtrados);
+        const data = fac === 'TODOS' ? rawData : rawData.filter(f => f[0] === fac);
+        render(data);
     }
 
-    function renderizar(data) {
-        const total = data.length;
-        const real = data.filter(f => (f[3]||'').toLowerCase().includes('realizada')).length;
-        const agen = data.filter(f => (f[3]||'').toLowerCase().includes('agendada')).length;
-        const alert = data.filter(f => (f[3]||'').toLowerCase().includes('pendiente') || (f[3]||'').toLowerCase().includes('sin')).length;
-        const valid = data.filter(f => (f[4]||'').toLowerCase().includes('validada')).length;
+    function render(data) {
+        const stats = {
+            total: data.length,
+            real: data.filter(f => (f[8]||'').includes('Realizada')).length,
+            agen: data.filter(f => (f[8]||'').includes('Agendada')).length,
+            sin: data.filter(f => (f[8]||'').includes('Sin respuesta')).length,
+            val: data.filter(f => (f[9]||'').includes('Validada')).length
+        };
 
-        document.getElementById('k-total').innerText = total;
-        document.getElementById('k-real').innerText = real;
-        document.getElementById('k-agen').innerText = agen;
-        document.getElementById('k-alerta').innerText = alert;
-        document.getElementById('k-val').innerText = valid;
-        document.getElementById('esc-di').innerText = alert > 0 ? `${alert} Pendiente` : "OK";
+        document.getElementById('k-total').innerText = stats.total;
+        document.getElementById('k-real').innerText = stats.real;
+        document.getElementById('k-agen').innerText = stats.agen;
+        document.getElementById('k-alerta').innerText = stats.sin;
+        document.getElementById('k-val').innerText = stats.val;
 
-        const body = document.getElementById('body-tabla');
-        body.innerHTML = '';
+        const esc = document.getElementById('esc-status');
+        if(stats.sin > 0) { esc.innerText = "ALERTA: SIN RESPUESTA"; esc.style.background = "#FFEBEE"; esc.style.color = "var(--r)"; }
+        else { esc.innerText = "SITUACIÓN CONTROLADA"; esc.style.background = "#E8F5E9"; esc.style.color = "var(--v)"; }
+
+        const tbody = document.getElementById('t-body');
+        tbody.innerHTML = '';
         data.forEach(f => {
-            const est = (f[3]||'').toLowerCase();
-            let color = 'var(--gris)', bg = '#F5F5F5';
-            if(est.includes('realizada')) { color = 'var(--verde)'; bg = '#E8F5E9'; }
-            else if(est.includes('agendada')) { color = 'var(--amarillo)'; bg = '#FFF3E0'; }
-            else if(est.includes('pendiente')) { color = 'var(--rojo)'; bg = '#FFEBEE'; }
+            let pillClass = 'pill-g';
+            if(f[8].includes('Realizada')) pillClass = 'pill-v';
+            if(f[8].includes('Agendada')) pillClass = 'pill-a';
+            if(f[8].includes('Sin respuesta')) pillClass = 'pill-r';
 
-            body.innerHTML += `
-                <tr>
-                    <td><strong>${f[1]}</strong></td>
-                    <td style="color:#666">${f[2]}</td>
-                    <td><span class="status-pill" style="color:${color}; background:${bg}"><span class="dot" style="background:${color}"></span>${f[3]}</span></td>
-                    <td style="font-weight:700; color:${(f[4]||'').includes('Validada') ? 'var(--verde)' : '#999'}">${f[4] || 'Pendiente'}</td>
-                </tr>
-            `;
+            tbody.innerHTML += `<tr>
+                <td><strong>${f[1]}</strong></td>
+                <td style="color:#777">${f[2]}</td>
+                <td><span class="pill ${pillClass}">${f[8]}</span></td>
+            </tr>`;
         });
 
-        const ctx = document.getElementById('chartDona').getContext('2d');
+        const ctx = document.getElementById('chart').getContext('2d');
         if(myChart) myChart.destroy();
         myChart = new Chart(ctx, {
             type: 'doughnut',
-            data: {
-                labels: ['Realizadas', 'Agendadas', 'Sin Resp.', 'Otros'],
-                datasets: [{ data: [real, agen, alert, (total-(real+agen+alert))], backgroundColor: ['#00A65A', '#F39C12', '#DD4B39', '#AAB7B8'] }]
-            },
-            options: { plugins: { legend: { position: 'bottom' } }, cutout: '70%' }
+            data: { labels: ['Realizada','Agendada','Sin Resp.','Pendiente'], datasets:[{ data:[stats.real, stats.agen, stats.sin, (stats.total-(stats.real+stats.agen+stats.sin))], backgroundColor:['#00A65A','#F39C12','#DD4B39','#AAB7B8'] }] },
+            options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
         });
     }
 
