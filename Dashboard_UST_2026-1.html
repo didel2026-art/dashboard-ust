@@ -1,212 +1,396 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Seguimiento Proyecto e-Learning UST 2026-1</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
-    h1 { color: #003366; }
-    table { border-collapse: collapse; width: 100%; background: white; }
-    th { background: #003366; color: white; padding: 10px; }
-    td { padding: 8px; border: 1px solid #ddd; }
-    tr:nth-child(even) { background: #f0f0f0; }
-    .fecha { font-size: 12px; color: gray; margin-top: 20px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seguimiento Proyecto e-Learning UST 2026-1</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #1a1a2e; }
+
+  .header {
+    background: linear-gradient(135deg, #003366 0%, #0055a5 100%);
+    color: white;
+    padding: 28px 40px 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  .header h1 { font-size: 22px; font-weight: 700; letter-spacing: 0.3px; }
+  .header .subtitulo { font-size: 13px; opacity: 0.85; margin-top: 6px; }
+  .header .fechas { font-size: 12px; opacity: 0.75; margin-top: 8px; background: rgba(255,255,255,0.12); padding: 6px 12px; border-radius: 6px; display: inline-block; }
+
+  .leyenda { background: white; padding: 10px 40px; border-bottom: 1px solid #e0e0e0; font-size: 12px; color: #555; display: flex; gap: 20px; flex-wrap: wrap; }
+  .leyenda span { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .dot.verde { background: #28a745; }
+  .dot.amarillo { background: #ffc107; }
+  .dot.rojo { background: #dc3545; }
+
+  .kpis { display: flex; gap: 16px; padding: 20px 40px; flex-wrap: wrap; }
+  .kpi { background: white; border-radius: 10px; padding: 16px 24px; flex: 1; min-width: 140px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-top: 4px solid #003366; }
+  .kpi .num { font-size: 36px; font-weight: 800; color: #003366; }
+  .kpi .label { font-size: 12px; color: #666; margin-top: 4px; }
+  .kpi.verde { border-top-color: #28a745; } .kpi.verde .num { color: #28a745; }
+  .kpi.amarillo { border-top-color: #ffc107; } .kpi.amarillo .num { color: #e6a800; }
+  .kpi.rojo { border-top-color: #dc3545; } .kpi.rojo .num { color: #dc3545; }
+
+  .seccion { padding: 0 40px 20px; }
+  .seccion h2 { font-size: 15px; font-weight: 700; color: #003366; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #e0e0e0; }
+
+  .facultades-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 30px; padding: 0 40px; }
+  .fac-card { background: white; border-radius: 10px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-left: 4px solid #003366; }
+  .fac-nombre { font-weight: 700; font-size: 14px; color: #003366; margin-bottom: 8px; }
+  .fac-stats { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .tag { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+  .tag.verde { background: #d4edda; color: #155724; }
+  .tag.amarillo { background: #fff3cd; color: #856404; }
+  .tag.rojo { background: #f8d7da; color: #721c24; }
+  .barra-wrap { background: #e9ecef; border-radius: 20px; height: 6px; margin-bottom: 6px; }
+  .barra-fill { background: linear-gradient(90deg, #28a745, #20c997); border-radius: 20px; height: 6px; transition: width 0.3s; }
+  .fac-pct { font-size: 11px; color: #888; }
+
+  table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.07); font-size: 13px; }
+  thead th { background: #003366; color: white; padding: 10px 12px; text-align: left; font-weight: 600; font-size: 12px; }
+  tbody tr { border-bottom: 1px solid #f0f0f0; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #f8f9ff !important; }
+  td { padding: 9px 12px; vertical-align: middle; }
+
+  tr.fac-header td { background: #e8eef6; color: #003366; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  tr.row-verde { background: #f6fff8; }
+  tr.row-amarillo { background: #fffdf0; }
+  tr.row-rojo { background: #fff8f8; }
+  tr.row-gris { background: #fafafa; }
+
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge-verde { background: #d4edda; color: #155724; }
+  .badge-amarillo { background: #fff3cd; color: #856404; }
+  .badge-rojo { background: #f8d7da; color: #721c24; }
+  .badge-gris { background: #e9ecef; color: #495057; }
+  .badge-fmt { background: #e8eef6; color: #003366; }
+
+  .obs-cell { font-size: 11px; color: #888; font-style: italic; }
+
+  .footer { text-align: center; padding: 20px; font-size: 12px; color: #aaa; }
+
+  @media (max-width: 768px) {
+    .header, .seccion, .kpis { padding-left: 16px; padding-right: 16px; }
+    .facultades-grid { padding: 0 16px; }
+    .kpi .num { font-size: 28px; }
+  }
+</style>
 </head>
 <body>
+
+<div class="header">
+  <div style="font-size:11px;opacity:0.7;margin-bottom:4px;">UNIVERSIDAD SANTO TOMÁS</div>
   <h1>Seguimiento Proyecto e-Learning UST 2026-1</h1>
+  <div class="subtitulo">Control de virtualización · 4 facultades · 32 asignaturas</div>
+  <div class="fechas">Correo enviado: 18/03  ·  Límite respuesta: 21/03  ·  Planif.→DEL: 28/03  ·  Validación DEL: 5/04  ·  Inicio prod. (18s): 12/04  ·  Inicio prod. Agronomía (12s): 22/06</div>
+</div>
+
+<div class="leyenda">
+  <span><span class="dot verde"></span> Realizada / Validada / Completo</span>
+  <span><span class="dot amarillo"></span> Agendada / En construcción / Enviada</span>
+  <span><span class="dot rojo"></span> Sin respuesta / Alerta</span>
+  <span><span class="dot gris" style="background:#aaa"></span> No inicia / No aplica</span>
+</div>
+
+<div class="kpis">
+  <div class="kpi"><div class="num">32</div><div class="label">Total asignaturas</div></div>
+  <div class="kpi verde"><div class="num">18</div><div class="label">Reuniones realizadas</div></div>
+  <div class="kpi amarillo"><div class="num">8</div><div class="label">Agendadas</div></div>
+  <div class="kpi rojo"><div class="num">2</div><div class="label">Sin respuesta</div></div>
+  <div class="kpi"><div class="num">0</div><div class="label">Planif. validadas</div></div>
+</div>
+
+<div class="facultades-grid">
+  
+      <div class="fac-card">
+        <div class="fac-nombre">Ing. Civil</div>
+        <div class="fac-stats">
+          <span class="tag verde">10 Realizadas</span>
+          <span class="tag amarillo">4 Agendadas</span>
+          <span class="tag rojo">1 Sin respuesta</span>
+        </div>
+        <div class="barra-wrap"><div class="barra-fill" style="width:67%"></div></div>
+        <div class="fac-pct">67% reuniones realizadas · 15 asignaturas</div>
+      </div>
+      <div class="fac-card">
+        <div class="fac-nombre">Ing. Comercial</div>
+        <div class="fac-stats">
+          <span class="tag verde">4 Realizadas</span>
+          <span class="tag amarillo">3 Agendadas</span>
+          <span class="tag rojo">1 Sin respuesta</span>
+        </div>
+        <div class="barra-wrap"><div class="barra-fill" style="width:40%"></div></div>
+        <div class="fac-pct">40% reuniones realizadas · 10 asignaturas</div>
+      </div>
+      <div class="fac-card">
+        <div class="fac-nombre">Agronomía</div>
+        <div class="fac-stats">
+          <span class="tag verde">2 Realizadas</span>
+          <span class="tag amarillo">1 Agendadas</span>
+          <span class="tag rojo">0 Sin respuesta</span>
+        </div>
+        <div class="barra-wrap"><div class="barra-fill" style="width:40%"></div></div>
+        <div class="fac-pct">40% reuniones realizadas · 5 asignaturas</div>
+      </div>
+      <div class="fac-card">
+        <div class="fac-nombre">Trabajo Social</div>
+        <div class="fac-stats">
+          <span class="tag verde">2 Realizadas</span>
+          <span class="tag amarillo">0 Agendadas</span>
+          <span class="tag rojo">0 Sin respuesta</span>
+        </div>
+        <div class="barra-wrap"><div class="barra-fill" style="width:100%"></div></div>
+        <div class="fac-pct">100% reuniones realizadas · 2 asignaturas</div>
+      </div>
+</div>
+
+<div class="seccion">
+  <h2>Estado por asignatura</h2>
   <table>
     <thead>
       <tr>
-        <th>Seguimiento Semanal — Proyecto e-Learning UST 2026-1</th>
-        <th></th>
-        <th></th>
-        <th></th>
+        <th>Asignatura</th>
+        <th>Docente</th>
+        <th>Formato</th>
+        <th>Reunión docente</th>
+        <th>Planificación</th>
+        <th>Observaciones</th>
       </tr>
     </thead>
-    <tbody><tr>
-      <td>Correo enviado: 18/03  ·  Límite respuesta: 21/03  ·  Planif.→DEL: 28/03  ·  Validación DEL: 5/04  ·  Inicio prod. (18s): 12/04  ·  Inicio prod. Agronomía (12s): 22/06</td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr><tr>
-      <td>🟢 Realizada · Validada · Completo     🟡 Agendada · Pendiente · Enviada en revisión     🔴 Sin respuesta +3d · No enviada</td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr><tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr><tr>
-      <td>Facultad</td>
-      <td>Asignatura</td>
-      <td>Docente</td>
-      <td>Fmt.
-programa</td>
-    </tr><tr>
-      <td>Ing. Civil</td>
+    <tbody>
+      <tr class="fac-header"><td colspan="6">Ing. Civil</td></tr><tr class="row-verde">
       <td>Ingeniería Térmica</td>
       <td>Rojo Camacho Jorge H.</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Ing. Civil</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-amarillo">En construcción</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-verde">
       <td>Gestión Incertidumbre y Simulación</td>
       <td>Nicolas Rodriguez</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Ing. Civil</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-amarillo">En construcción</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-verde">
       <td>Finanzas Corporativas</td>
       <td>Mauricio Torres</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Ing. Civil</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-verde">
       <td>Inteligencia de Negocios</td>
       <td>Claudio Henriquez</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Ing. Civil</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-amarillo">En construcción</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-verde">
       <td>Electivo I: Energías Renovables</td>
       <td>Leonardo Rodriguez</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Ing. Civil</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-amarillo">En construcción</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-amarillo">
       <td>Electivo I: Op. Humanitarias</td>
       <td>Leonardo Rodriguez</td>
-      <td>Pendiente</td>
-    </tr><tr>
-      <td>Ing. Civil</td>
+      <td><span class="badge badge-fmt">Pendiente</span></td>
+      <td><span class="badge badge-amarillo">Agendada</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-verde">
       <td>Regresión y Pronóstico de Datos</td>
       <td>Francisco Labbe</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Ing. Civil</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-amarillo">En construcción</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-verde">
       <td>Proyecto de Título</td>
       <td>Monserrat Martinez</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Ing. Civil</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-amarillo">En construcción</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-verde">
       <td>Pronóstico de Datos e IA</td>
       <td>Claudio Henriquez</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Ing. Civil</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-verde">
       <td>Electivo III: Op. Humanitarias</td>
       <td>Rodrigo Barraza</td>
-      <td>Pendiente</td>
-    </tr><tr>
-      <td>Ing. Civil</td>
+      <td><span class="badge badge-fmt">Pendiente</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-amarillo">
       <td>Electivo III: Modelo Neg. Residuos</td>
       <td>Ana Jimenez</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Ing. Civil</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-amarillo">Agendada</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-verde">
       <td>Electivo I: Tecnologías Excavación</td>
       <td>Cristian Rivera</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Ing. Civil</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-amarillo">En construcción</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-rojo">
       <td>Electivo III: IA y Tecnologías 4.0</td>
       <td>Luis Alvarez</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Ing. Civil</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-rojo">Sin respuesta</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-amarillo">
       <td>Gestión de Operaciones Mineras</td>
       <td>Juan Orellana</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Ing. Civil</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-amarillo">Agendada</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-amarillo">
       <td>Taller Emprendimiento en Minería</td>
       <td>Juan Orellana</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Ing. Comercial</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-amarillo">Agendada</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="fac-header"><td colspan="6">Ing. Comercial</td></tr><tr class="row-amarillo">
       <td>Plan de Negocios</td>
       <td>Paola Salas</td>
-      <td>Antiguo</td>
-    </tr><tr>
-      <td>Ing. Comercial</td>
+      <td><span class="badge badge-fmt">Antiguo</span></td>
+      <td><span class="badge badge-amarillo">Agendada</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-verde">
       <td>Simulación de Negocios</td>
       <td>Rodrigo Ramirez</td>
-      <td>Antiguo</td>
-    </tr><tr>
-      <td>Ing. Comercial</td>
+      <td><span class="badge badge-fmt">Antiguo</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-amarillo">En construcción</span></td>
+      <td class="obs-cell">Lab. virtual sincrónico</td>
+    </tr><tr class="row-gris">
       <td>Mercado de Capitales</td>
       <td>Ajuste DEL</td>
-      <td>Antiguo</td>
-    </tr><tr>
-      <td>Ing. Comercial</td>
+      <td><span class="badge badge-fmt">Antiguo</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-gris">
       <td>Análisis de Datos</td>
       <td>Ajuste DEL</td>
-      <td>Antiguo</td>
-    </tr><tr>
-      <td>Ing. Comercial</td>
+      <td><span class="badge badge-fmt">Antiguo</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell">Lab. virtual sincrónico</td>
+    </tr><tr class="row-amarillo">
       <td>Inglés Avanzado I</td>
       <td>Claudia Jeria</td>
-      <td>Antiguo</td>
-    </tr><tr>
-      <td>Ing. Comercial</td>
+      <td><span class="badge badge-fmt">Antiguo</span></td>
+      <td><span class="badge badge-amarillo">Agendada</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-verde">
       <td>Finanzas Corporativas</td>
       <td>Sergio Álvarez</td>
-      <td>—</td>
-    </tr><tr>
-      <td>Ing. Comercial</td>
+      <td><span class="badge badge-fmt">—</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-amarillo">En construcción</span></td>
+      <td class="obs-cell">Sin correo registrado</td>
+    </tr><tr class="row-rojo">
       <td>Políticas Públicas e Innovación</td>
       <td>Jorge Miranda</td>
-      <td>—</td>
-    </tr><tr>
-      <td>Ing. Comercial</td>
+      <td><span class="badge badge-fmt">—</span></td>
+      <td><span class="badge badge-rojo">Sin respuesta</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell">Sin correo registrado</td>
+    </tr><tr class="row-verde">
       <td>Contabilidad Financiera</td>
       <td>Luis Lagos</td>
-      <td>Antiguo</td>
-    </tr><tr>
-      <td>Ing. Comercial</td>
+      <td><span class="badge badge-fmt">Antiguo</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-amarillo">En construcción</span></td>
+      <td class="obs-cell">Apoya M. Fernanda Pino</td>
+    </tr><tr class="row-verde">
       <td>Microeconomía</td>
       <td>Felipe Riffo</td>
-      <td>Antiguo</td>
-    </tr><tr>
-      <td>Ing. Comercial</td>
+      <td><span class="badge badge-fmt">Antiguo</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-amarillo">En construcción</span></td>
+      <td class="obs-cell"></td>
+    </tr><tr class="row-amarillo">
       <td>Derecho Comercial y Laboral</td>
       <td>Felipe Lagos</td>
-      <td>Antiguo</td>
-    </tr><tr>
-      <td>Agronomía</td>
+      <td><span class="badge badge-fmt">Antiguo</span></td>
+      <td><span class="badge badge-amarillo">Agendada</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell">Apoya Camilo Araya</td>
+    </tr><tr class="fac-header"><td colspan="6">Agronomía</td></tr><tr class="row-verde">
       <td>Evaluación de Proyectos</td>
       <td>Raúl González</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Agronomía</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-amarillo">En construcción</span></td>
+      <td class="obs-cell">Inicia 15 junio</td>
+    </tr><tr class="row-verde">
       <td>Sist. Prod. Cultivos Sostenibles</td>
       <td>Claudio Koplow</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Agronomía</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-amarillo">En construcción</span></td>
+      <td class="obs-cell">Inicia 15 junio</td>
+    </tr><tr class="row-amarillo">
       <td>Sist. Prod. Frutales Sostenibles</td>
       <td>Katherine Garcia</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Agronomía</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-amarillo">Agendada</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell">Inicia 15 junio</td>
+    </tr><tr class="row-gris">
       <td>Trabajo de Título</td>
       <td>Alexis Ortiz</td>
-      <td>Pendiente</td>
-    </tr><tr>
-      <td>Agronomía</td>
+      <td><span class="badge badge-fmt">Pendiente</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell">Inicia 1 septiembre</td>
+    </tr><tr class="row-gris">
       <td>Calidad e Inocuidad Alimentaria</td>
       <td>Alexis Ortiz</td>
-      <td>Pendiente</td>
-    </tr><tr>
-      <td>Trabajo Social</td>
+      <td><span class="badge badge-fmt">Pendiente</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td><span class="badge badge-gris">No inicia</span></td>
+      <td class="obs-cell">Inicia 1 septiembre</td>
+    </tr><tr class="fac-header"><td colspan="6">Trabajo Social</td></tr><tr class="row-verde">
       <td>Análisis de Datos Cualitativos</td>
       <td>Verónica Villagra</td>
-      <td>Nuevo</td>
-    </tr><tr>
-      <td>Trabajo Social</td>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-amarillo">En construcción</span></td>
+      <td class="obs-cell">Lab. virtual sincrónico</td>
+    </tr><tr class="row-verde">
       <td>Análisis de Datos Cuantitativos</td>
       <td>Daniel Valenzuela</td>
-      <td>Nuevo</td>
-    </tr></tbody>
+      <td><span class="badge badge-fmt">Nuevo</span></td>
+      <td><span class="badge badge-verde">Realizada</span></td>
+      <td><span class="badge badge-amarillo">En construcción</span></td>
+      <td class="obs-cell">Lab. virtual sincrónico</td>
+    </tr>
+    </tbody>
   </table>
-  <p class="fecha">Datos al: 25-03-2026</p>
+</div>
+
+<div class="footer">Datos al: <strong>25-03-2026</strong> · Proyecto e-Learning UST 2026-1 · Actualización automática vía Google Sheets</div>
+
 </body>
 </html>
