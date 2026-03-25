@@ -172,7 +172,7 @@ tr:last-child td{border:none}tr:hover td{background:#F8F6EE}
   <div class="kpi k-az"><div class="kpi-l">Total</div><div class="kpi-n" id="kv-tot">—</div><div class="kpi-s">asignaturas</div></div>
   <div class="kpi" id="kc-re"><div class="kpi-l">Realizadas</div><div class="kpi-n" id="kv-re">—</div><div class="kpi-s" id="ks-re"></div></div>
   <div class="kpi" id="kc-ag"><div class="kpi-l">Agendadas</div><div class="kpi-n" id="kv-ag">—</div><div class="kpi-s" id="ks-ag"></div></div>
-  <div class="kpi" id="kc-sr"><div class="kpi-l">Sin respuesta</div><div class="kpi-n" id="kv-sr">—</div><div class="kpi-s" id="ks-sr"></div></div>
+  <div class="kpi" id="kc-sr"><div class="kpi-l">Sin respuesta</div><div class="kpi-n" id="kv-sr">—</div><div class="kpi-s" id="ks-sr" style="max-height:80px;overflow-y:auto"></div></div>
   <div class="kpi" id="kc-va"><div class="kpi-l">Planif. validadas</div><div class="kpi-n" id="kv-va">—</div><div class="kpi-s" id="ks-va"></div></div>
 </div>
 
@@ -239,7 +239,7 @@ tr:last-child td{border:none}tr:hover td{background:#F8F6EE}
   <div class="fac-grid" id="fac-cards"></div>
 </div>
 
-<div class="footer">Datos al: <strong>21/03/2026</strong> · Proyecto e-Learning UST 2026-1 · Para actualizar ejecuta "📊 Dashboard → Publicar Dashboard" en Google Sheets</div>
+<div class="footer">Datos al: <strong>FECHA_HOY</strong> · Proyecto e-Learning UST 2026-1 · Actualización automática vía Google Sheets</div>
 
 </div>
 <script>
@@ -384,7 +384,9 @@ function render(){
   document.getElementById('kv-tot').textContent=asigs.length;
   document.getElementById('kv-re').textContent=re;document.getElementById('ks-re').textContent='de '+asigs.length;
   document.getElementById('kv-ag').textContent=ag;document.getElementById('ks-ag').textContent='de '+asigs.length;
-  document.getElementById('kv-sr').textContent=sr;document.getElementById('ks-sr').textContent=sr===0?'sin alerta':'requiere acción';
+  document.getElementById('kv-sr').textContent=sr;
+  const srDocentes=asigs.filter(a=>a.est==='Sin respuesta').map(a=>a.doc);
+  document.getElementById('ks-sr').innerHTML=sr===0?'sin alerta':'<span style="color:#8B1A1A;font-size:10px;line-height:1.6">'+srDocentes.join('<br>')+'</span>';
   document.getElementById('kv-va').textContent=va;document.getElementById('ks-va').textContent='de '+asigs.length;
   document.getElementById('kc-re').className='kpi '+(re>0?'k-ve':'k-az');
   document.getElementById('kc-ag').className='kpi '+(ag>0?'k-am':'k-az');
