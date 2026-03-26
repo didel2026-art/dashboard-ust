@@ -18,8 +18,6 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#EEEAE0;color:#1C1C1C
   --borde:#DDD8C4;--bg:#EEEAE0;--white:#fff
 }
 .wrap{max-width:1400px;margin:0 auto;padding:18px}
-
-/* HEADER */
 .header{background:var(--az);color:#fff;padding:18px 26px;border-radius:14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;border-bottom:4px solid var(--am);position:relative;overflow:hidden}
 .header::after{content:'';position:absolute;right:-50px;top:-50px;width:200px;height:200px;border-radius:50%;background:rgba(200,169,81,.07);pointer-events:none}
 .h-ust{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--am);margin-bottom:4px}
@@ -30,19 +28,13 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#EEEAE0;color:#1C1C1C
 .h-dias{font-size:42px;font-weight:800;line-height:1;font-family:'DM Mono',monospace}
 .h-dias.w{color:#F5A623}.h-dias.d{color:#FF6B6B}
 .h-diasl{font-size:10px;opacity:.5;margin-top:2px}
-
-/* LEGEND */
 .legend{display:flex;gap:14px;flex-wrap:wrap;padding:9px 16px;background:var(--white);border-radius:10px;border:1px solid var(--borde);margin-bottom:12px;align-items:center}
 .leg{display:flex;align-items:center;gap:5px;font-size:11px;color:#555;font-weight:500}
 .leg-dot{width:10px;height:10px;border-radius:50%}
-
-/* TABS */
 .tabs{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap}
 .tab{padding:8px 18px;border:2px solid var(--borde);border-radius:9px;background:var(--white);color:#666;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit}
 .tab:hover{border-color:var(--az2);color:var(--az)}
 .tab.on{background:var(--az);color:#fff;border-color:var(--az)}
-
-/* KPIs */
 .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:12px}
 .kpi{background:var(--white);border-radius:11px;padding:14px 12px;text-align:center;border:2px solid var(--borde)}
 .kpi-l{font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;font-weight:600}
@@ -52,20 +44,14 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#EEEAE0;color:#1C1C1C
 .k-ve{border-color:#5CB87A;background:var(--ve-bg)}.k-ve .kpi-n{color:#1E6B2E}
 .k-ro{border-color:#E08080;background:var(--ro-bg)}.k-ro .kpi-n{color:#8B1A1A}
 .k-am{border-color:var(--am);background:var(--am-bg)}.k-am .kpi-n{color:#7A5C00}
-
-/* GRID */
 .g3{display:grid;grid-template-columns:190px 1fr 195px;gap:12px;margin-bottom:12px}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .panel{background:var(--white);border-radius:11px;padding:15px;border:1px solid var(--borde)}
 .ptitle{font-size:10px;font-weight:700;color:var(--az);text-transform:uppercase;letter-spacing:.7px;margin-bottom:11px;padding-bottom:7px;border-bottom:2px solid var(--am-bg)}
-
-/* DAYS */
 .dias-box{text-align:center;padding:10px 0 14px;background:var(--am-bg);border-radius:9px;margin-bottom:10px}
 .dias-n{font-size:52px;font-weight:800;line-height:1;font-family:'DM Mono',monospace;color:var(--az)}
 .dias-n.w{color:#7A5C00}.dias-n.d{color:#8B1A1A}
 .dias-l{font-size:10px;color:#999;margin-top:3px}
-
-/* ESC */
 .er{display:flex;align-items:center;gap:6px;padding:6px 9px;border-radius:7px;margin-bottom:4px;font-size:12px;border-left:4px solid}
 .er.ok{background:var(--ve-bg);border-color:var(--ve)}
 .er.w{background:var(--am-bg);border-color:var(--am)}
@@ -77,16 +63,13 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#EEEAE0;color:#1C1C1C
 .er-b.ok{background:#D4F5E6;color:#1E6B2E}
 .er-b.w{background:#E8D08A;color:#7A5C00}
 .er-b.c{background:#FFE0E0;color:#8B1A1A}
-
-/* TABLE */
-.tbl-wrap{overflow-y:auto;max-height:270px}
+/* CAMBIO CLAVE: tabla ocupa todo el espacio vertical disponible */
+.tbl-wrap{overflow-y:auto;max-height:calc(100vh - 420px)}
 table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
 thead{position:sticky;top:0;z-index:1}
 th{font-size:10px;text-transform:uppercase;padding:6px 8px;border-bottom:2px solid var(--am-bg);text-align:left;font-weight:700;color:var(--az);background:#F8F6EE}
 td{padding:5px 8px;border-bottom:1px solid #F0EDE0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 tr:last-child td{border:none}tr:hover td{background:#F8F6EE}
-
-/* BADGES */
 .b{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
 .bd{width:5px;height:5px;border-radius:50%}
 .b-re{background:var(--ve-bg);color:#1E6B2E}.b-re .bd{background:var(--ve)}
@@ -96,24 +79,18 @@ tr:last-child td{border:none}tr:hover td{background:#F8F6EE}
 .b-ec{background:#E3F2FD;color:#1565C0}.b-ec .bd{background:#2196F3}
 .b-en{background:#F3E5F5;color:#6A1B9A}.b-en .bd{background:#9C27B0}
 .b-va{background:var(--ve-bg);color:#1E6B2E}.b-va .bd{background:var(--ve)}
-
-/* CORREO */
 .correo-lbl{font-size:11px;font-weight:700;color:var(--az);margin:10px 0 5px;padding-top:10px;border-top:2px solid var(--am-bg)}
 .correo{border-radius:9px;padding:10px 13px;font-size:12px;line-height:1.7;border-left:4px solid}
 .correo.ok{background:var(--am-bg);border-color:var(--am);color:#888;font-style:italic}
 .correo.alert{background:var(--ro-bg);border-color:var(--ro);color:#333;cursor:pointer}
 .correo.alert:hover{opacity:.88}
 .copy-hint{font-size:10px;color:#bbb;text-align:right;margin-top:4px}
-
-/* PROD BARS */
 .pbar{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .pbar-l{font-size:11px;color:#666;min-width:50px;font-weight:600}
 .pbar-bg{flex:1;background:#E8E4D8;border-radius:4px;height:7px;overflow:hidden}
 .pbar-fill{height:100%;border-radius:4px;transition:width .5s}
 .pbar-pct{font-size:11px;font-weight:700;min-width:30px;text-align:right;font-family:'DM Mono',monospace}
-
-/* FAC CARDS */
-.fac-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.fac-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
 .fac-card{border-radius:10px;padding:13px;border:2px solid}
 .fac-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
 .fac-n{font-size:26px;font-weight:800;font-family:'DM Mono',monospace;line-height:1}
@@ -121,23 +98,18 @@ tr:last-child td{border:none}tr:hover td{background:#F8F6EE}
 .fac-bar-bg{background:#E0E0E0;border-radius:4px;height:6px;overflow:hidden;margin-bottom:4px}
 .fac-bar-fill{height:100%;border-radius:4px}
 .fac-pct{font-size:10px;font-weight:700}
-
-/* JP PANEL */
 .jp-tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .jp-btn{padding:7px 16px;border:2px solid var(--borde);border-radius:9px;background:var(--white);color:#666;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;font-family:inherit;display:flex;align-items:center;gap:7px}
 .jp-btn:hover{border-color:var(--az2);color:var(--az)}
 .jp-btn.on{background:var(--az);color:#fff;border-color:var(--az)}
 .jp-badge{background:rgba(255,255,255,.25);border-radius:20px;padding:1px 7px;font-size:11px;font-family:'DM Mono',monospace}
 .jp-btn:not(.on) .jp-badge{background:var(--az-bg);color:var(--az)}
-.jp-info{font-size:11px;color:#999;margin-bottom:10px;font-style:italic}
 .jp-tbl-wrap{overflow-y:auto;max-height:280px}
 .jp-stat-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
 .jp-stat{background:var(--az-bg);border-radius:8px;padding:7px 12px;font-size:11px;font-weight:700;color:var(--az);display:flex;align-items:center;gap:5px}
 .jp-stat span{font-size:16px;font-family:'DM Mono',monospace}
-
 .footer{text-align:center;margin-top:12px;font-size:11px;color:#aaa;padding:9px;background:var(--white);border-radius:9px;border:1px solid var(--borde)}
-
-@media(max-width:960px){.g3{grid-template-columns:1fr}.g2{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(3,1fr)}.fac-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:960px){.g3{grid-template-columns:1fr}.g2{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(3,1fr)}.fac-grid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
@@ -147,7 +119,7 @@ tr:last-child td{border:none}tr:hover td{background:#F8F6EE}
   <div>
     <div class="h-ust">UNIVERSIDAD SANTO TOMÁS</div>
     <div class="h-title">Seguimiento Proyecto e-Learning UST 2026-1</div>
-    <div class="h-sub">Control de virtualización · 4 facultades · 32 asignaturas</div>
+    <div class="h-sub">Control de virtualización · 6 facultades · 42 asignaturas</div>
     <span class="h-fase" id="fase"></span>
   </div>
   <div class="h-right">
@@ -177,7 +149,6 @@ tr:last-child td{border:none}tr:hover td{background:#F8F6EE}
 </div>
 
 <div class="g3">
-  <!-- ESCALAMIENTO -->
   <div class="panel">
     <div class="ptitle">Escalamiento</div>
     <div class="dias-box">
@@ -190,7 +161,6 @@ tr:last-child td{border:none}tr:hover td{background:#F8F6EE}
     <div class="copy-hint" id="copy-hint"></div>
   </div>
 
-  <!-- TABLA ASIGNATURAS -->
   <div class="panel">
     <div class="ptitle">Estado por asignatura</div>
     <div class="tbl-wrap">
@@ -202,7 +172,6 @@ tr:last-child td{border:none}tr:hover td{background:#F8F6EE}
     </div>
   </div>
 
-  <!-- DONUT -->
   <div class="panel">
     <div class="ptitle">Estado reuniones</div>
     <svg id="svg-donut" viewBox="0 0 200 165" width="100%" style="max-height:175px"></svg>
@@ -210,15 +179,12 @@ tr:last-child td{border:none}tr:hover td{background:#F8F6EE}
   </div>
 </div>
 
-<!-- PRODUCCIÓN + JP PANEL -->
 <div class="g2" style="margin-bottom:12px">
   <div class="panel">
     <div class="ptitle">Avance producción semanal</div>
     <div id="prod-bars"></div>
     <svg id="svg-linea" viewBox="0 0 420 110" width="100%" style="margin-top:10px"></svg>
   </div>
-
-  <!-- JP PANEL reemplaza "Resumen global por facultad" -->
   <div class="panel">
     <div class="ptitle">Vista por Jefe de Proyecto</div>
     <div class="jp-tabs" id="jp-tabs"></div>
@@ -233,13 +199,12 @@ tr:last-child td{border:none}tr:hover td{background:#F8F6EE}
   </div>
 </div>
 
-<!-- TARJETAS FACULTAD -->
 <div class="panel">
   <div class="ptitle">Tarjetas por facultad</div>
   <div class="fac-grid" id="fac-cards"></div>
 </div>
 
-<div class="footer">Datos al: <strong>FECHA_HOY</strong> · Proyecto e-Learning UST 2026-1 · Actualización automática vía Google Sheets</div>
+<div class="footer">Datos al: <strong id="fdate">—</strong> · Proyecto e-Learning UST 2026-1 · Actualización automática vía GitHub</div>
 
 </div>
 <script>
@@ -254,10 +219,10 @@ const CORREOS={
   DNE:(d,n)=>`Estimado/a ${d}: El DNE notifica que "${n}" está en riesgo. Respuesta inmediata requerida. Att. DNE.`,
   "Decano/a":(d,n)=>`Estimado/a ${d}: El Decano notifica con urgencia que "${n}" no podrá virtualizar sin respuesta hoy. Att. Decanato.`
 };
-const FAC_COLS={'Ing. Civil':'#1565C0','Ing. Comercial':'#2E7D32','Agronomía':'#E65100','Trabajo Social':'#C62828'};
+const FAC_COLS={'Ing. Civil':'#1565C0','Ing. Comercial':'#2E7D32','Agronomía':'#E65100','Trabajo Social':'#C62828','Salud':'#00838F','Form. General':'#6A1B9A'};
 const JP_COLS={'María José':'#6A1B9A','José Luis':'#1565C0','Noelia':'#E65100'};
 const CV='#27A06E',CD='#C8A951',CR='#D63031',CG='#AAAAAA',CA='#1A3A6B';
-let fi=0, jpActivo='María José', correoActivo='';
+let fi=0,jpActivo='María José',correoActivo='';
 
 const inicio=new Date(2026,2,18),hoy=new Date();
 const dias=Math.max(1,Math.floor((hoy-inicio)/86400000));
@@ -265,6 +230,7 @@ const meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','
 const dsem=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 
 document.getElementById('fecha-hoy').textContent=dsem[hoy.getDay()]+' '+hoy.getDate()+' de '+meses[hoy.getMonth()]+' '+hoy.getFullYear();
+document.getElementById('fdate').textContent=hoy.toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric'});
 const hd=document.getElementById('h-dias');
 hd.textContent=dias;hd.className='h-dias'+(dias<=2?'':dias<=6?' w':' d');
 const dn=document.getElementById('dias-n');
@@ -280,7 +246,6 @@ function badge(e){
            'No aplica':'b-ni','En construcción':'b-ec','Enviada':'b-en','Validada':'b-va'};
   return `<span class="b ${m[e]||'b-ni'}"><span class="bd"></span>${e||'—'}</span>`;
 }
-
 function progColor(p){return p>=80?CV:p>=30?CD:CR;}
 
 function donut(svg,vals,cols,cx,cy,r,ri){
@@ -342,13 +307,11 @@ function renderJP(){
     const col=JP_COLS[jp]||'#888';
     const btn=document.createElement('button');
     btn.className='jp-btn'+(jpActivo===jp?' on':'');
-    if(jpActivo===jp) btn.style.background=col,btn.style.borderColor=col;
+    if(jpActivo===jp)btn.style.background=col,btn.style.borderColor=col;
     btn.innerHTML=`${jp}<span class="jp-badge">${cnt}</span>`;
     btn.onclick=()=>{jpActivo=jp;renderJP();};
     w.appendChild(btn);
   });
-
-  // Stats
   const asigs=allAsigs().filter(a=>a.jp===jpActivo);
   const re=asigs.filter(a=>a.est==='Realizada').length;
   const ag=asigs.filter(a=>a.est==='Agendada').length;
@@ -360,8 +323,6 @@ function renderJP(){
     <div class="jp-stat" style="background:#F5EDD0;color:#7A5C00"><span>${ag}</span> agendadas</div>
     ${sr>0?`<div class="jp-stat" style="background:#FDF0F0;color:#8B1A1A"><span>${sr}</span> sin resp.</div>`:''}
   `;
-
-  // Tabla JP
   const tb=document.getElementById('jp-tbody');tb.innerHTML='';
   asigs.forEach(a=>{
     tb.innerHTML+=`<tr>
@@ -393,7 +354,6 @@ function render(){
   document.getElementById('kc-sr').className='kpi '+(sr===0?'k-ve':'k-ro');
   document.getElementById('kc-va').className='kpi '+(va>0?'k-ve':'k-az');
 
-  // Escalamiento — siempre muestra nivel activo según días
   const ew=document.getElementById('esc-wrap');ew.innerHTML='';
   ESC.forEach(e=>{
     const n=asigs.filter(a=>a.est==='Sin respuesta'&&a.esc===e.a).length;
@@ -402,7 +362,6 @@ function render(){
     ew.innerHTML+=`<div class="er ${cls}"><span class="er-a ${cls}">${e.a}</span><span class="er-f">${e.f} ${e.d}</span><span class="er-b ${cls}">${est}</span></div>`;
   });
 
-  // Correo
   const sinEsc=asigs.filter(a=>a.est==='Sin respuesta'&&a.esc);
   const box=document.getElementById('correo-box'),lbl=document.getElementById('correo-lbl'),hint=document.getElementById('copy-hint');
   if(!sinEsc.length){
@@ -414,7 +373,6 @@ function render(){
     box.className='correo alert';box.textContent=correoActivo;hint.textContent='Clic para copiar';
   }
 
-  // Tabla
   const tb=document.getElementById('tbody');tb.innerHTML='';
   asigs.forEach(a=>{
     tb.innerHTML+=`<tr>
@@ -425,15 +383,14 @@ function render(){
     </tr>`;
   });
 
-  // Donut
   donut(document.getElementById('svg-donut'),[re,ag,sr,ni],[CV,CD,CR,CG],100,78,63,33);
   const lC=[CV,CD,CR,CG],lL=['Realizadas','Agendadas','Sin resp.','No inicia'],lV=[re,ag,sr,ni];
   document.getElementById('ley-donut').innerHTML=lL.map((l,i)=>`<span style="display:flex;align-items:center;gap:3px"><span style="width:8px;height:8px;border-radius:2px;background:${lC[i]}"></span>${l}(${lV[i]})</span>`).join('');
 
-  // Producción
   const pg=HITOS.map((_,i)=>{
-    const act=asigs.map(a=>a.prod[i]).filter(v=>v>=0);
-    return act.length?Math.round(act.reduce((s,v)=>s+v,0)/act.length*100):0;
+    const act=asigs.filter(a=>a.prod[i]>=0);
+    if(!act.length)return 0;
+    return Math.round(act.filter(a=>a.prod[i]===1).length/act.length*100);
   });
   const pb=document.getElementById('prod-bars');pb.innerHTML='';
   HITOS.forEach((h,i)=>{
@@ -442,7 +399,6 @@ function render(){
   });
   linea(document.getElementById('svg-linea'),pg,HITOS);
 
-  // Tarjetas facultad
   const fc=document.getElementById('fac-cards');fc.innerHTML='';
   DATA.forEach(fac=>{
     const fr=fac.asigs.filter(a=>a.est==='Realizada').length;
@@ -457,7 +413,6 @@ function render(){
     </div>`;
   });
 
-  // Render JP panel
   renderJP();
 }
 
