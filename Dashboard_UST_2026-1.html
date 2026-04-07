@@ -22,31 +22,25 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#F0F2F5;color:#2C2C2C
   --im-col:#5E9E5E;--im-bg:#E8F2E8;--im-border:#A4CCA4;
 }
 .wrap{max-width:1480px;margin:0 auto;padding:14px}
-.ust-header-wrap{border-radius:14px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.09)}
-.ust-topbar{background:var(--ust-dark);color:rgba(255,255,255,.7);font-size:11px;padding:4px 20px;display:flex;justify-content:space-between;align-items:center}
-.ust-navbar{background:var(--ust);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.ust-brand{display:flex;align-items:center;gap:12px}
-.ust-logo{width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ust-logo svg{width:36px;height:36px}
-.ust-brand-name{color:#fff;font-size:13px;font-weight:700;letter-spacing:.4px;line-height:1.2}
-.ust-brand-sub{color:rgba(255,255,255,.6);font-size:10px;margin-top:1px}
-.ust-nav-info{text-align:right;color:#fff}
-.ust-nav-fecha{font-size:10px;opacity:.65;margin-bottom:1px}
-.ust-nav-dias{font-size:34px;font-weight:800;line-height:1;font-family:'DM Mono',monospace}
-.ust-nav-dias.w{color:#FFD87A}.ust-nav-dias.d{color:#FF9090}
-.ust-nav-diasl{font-size:9px;opacity:.4;margin-top:1px}
-.ust-subbar{background:#1A2744;padding:7px 20px;display:flex;align-items:center;flex-wrap:wrap;border-bottom:3px solid rgba(0,0,0,.15)}
-.ust-subnav-item{color:rgba(255,255,255,.8);font-size:11px;font-weight:600;padding:4px 12px;border-right:1px solid rgba(255,255,255,.1);white-space:nowrap}
-.ust-subnav-item:last-child{border-right:none}
-.ust-subnav-item.active{background:rgba(255,255,255,.13);border-radius:5px;border-right:none;color:#fff}
-.ust-fase-pill{background:#D06828;color:#fff;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700;margin-left:auto}
+.ust-header-wrap{border-radius:14px;overflow:hidden;margin-bottom:12px;box-shadow:0 4px 16px rgba(0,0,0,.18);background:#1A2744}
+.ust-header-main{padding:22px 28px;display:flex;justify-content:space-between;align-items:flex-start}
+.ust-header-left{display:flex;flex-direction:column;gap:2px}
+.ust-univ-label{font-size:11px;font-weight:700;color:#C4A84A;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:4px}
+.ust-title{font-size:22px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:2px}
+.ust-subtitle{font-size:11px;color:rgba(255,255,255,.5);margin-bottom:4px}
+.ust-header-right{text-align:right;color:#fff;flex-shrink:0}
+.ust-nav-fecha{font-size:11px;color:rgba(255,255,255,.55);margin-bottom:4px}
+.ust-nav-dias{font-size:48px;font-weight:800;line-height:1;font-family:'DM Mono',monospace;color:#4DC8A8}
+.ust-nav-dias.w{color:#FFD87A}.ust-nav-dias.d{color:#FF7070}
+.ust-nav-diasl{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}
+.ust-fase-pill{background:#C4943A;color:#fff;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block}
 .legend{display:flex;gap:12px;flex-wrap:wrap;padding:8px 14px;background:var(--card-bg);border-radius:9px;border:1px solid var(--borde);margin-bottom:10px;align-items:center}
 .leg{display:flex;align-items:center;gap:4px;font-size:11px;color:#666;font-weight:500}
 .leg-dot{width:8px;height:8px;border-radius:50%}
 .tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-.tab{padding:6px 14px;border:2px solid var(--borde);border-radius:8px;background:var(--card-bg);color:#777;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit}
+.tab{padding:6px 14px;border:2px solid var(--borde);border-radius:8px;background:#fff;color:#555;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit}
 .tab:hover{border-color:var(--ust);color:var(--ust)}
-.tab.on{background:var(--ust);color:#fff;border-color:var(--ust)}
+.tab.on{background:#1A2744;color:#fff;border-color:#1A2744}
 .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:9px;margin-bottom:10px}
 .kpi{background:var(--card-bg);border-radius:11px;padding:12px 10px;text-align:center;border:2px solid var(--borde)}
 .kpi-l{font-size:9px;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;font-weight:700}
@@ -138,15 +132,20 @@ tr:last-child td{border:none}
 <body>
 <div class="wrap">
 <div class="ust-header-wrap">
-  <div class="ust-topbar"><div>Sitios Santo Tomás ∨</div><div style="display:flex;gap:14px"><span>Admisión</span><span>Estudiantes ∨</span><span>Egresados ∨</span><span>Intranet Docente ↗</span></div></div>
-  <div class="ust-navbar">
-    <div class="ust-brand">
-      <div class="ust-logo"><svg viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg"><circle cx="19" cy="19" r="18" fill="#3D8B76"/><text x="19" y="15" text-anchor="middle" font-size="7" font-weight="700" fill="#fff" font-family="serif">SANTO</text><text x="19" y="22" text-anchor="middle" font-size="9" font-weight="800" fill="#fff" font-family="sans-serif">UST</text><text x="19" y="29" text-anchor="middle" font-size="5.5" fill="rgba(255,255,255,.8)" font-family="serif">TOMÁS</text></svg></div>
-      <div><div class="ust-brand-name">UNIVERSIDAD SANTO TOMÁS</div><div class="ust-brand-sub">Seguimiento Proyecto e-Learning · 2026-1 · 43 asignaturas</div></div>
+  <div class="ust-header-main">
+    <div class="ust-header-left">
+      <div class="ust-univ-label">UNIVERSIDAD SANTO TOMÁS</div>
+      <div class="ust-title">Seguimiento Proyecto e-Learning UST 2026-1</div>
+      <div class="ust-subtitle">Control de virtualización · 6 facultades · 43 asignaturas</div>
+      <div style="margin-top:10px"><span class="ust-fase-pill" id="fase"></span></div>
     </div>
-    <div class="ust-nav-info"><div class="ust-nav-fecha" id="fecha-hoy"></div><div class="ust-nav-dias" id="h-dias">—</div><div class="ust-nav-diasl">días desde correo (18/03)</div><div style="font-size:9px;color:rgba(255,255,255,.3);margin-top:1px">Datos al 06/04/2026</div></div>
+    <div class="ust-header-right">
+      <div class="ust-nav-fecha" id="fecha-hoy"></div>
+      <div class="ust-nav-dias" id="h-dias">—</div>
+      <div class="ust-nav-diasl">días desde correo (18/03)</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:4px">Datos al 06/04/2026</div>
+    </div>
   </div>
-  <div class="ust-subbar"><div class="ust-subnav-item">Control de virtualización</div><div class="ust-subnav-item">6 facultades</div><div class="ust-subnav-item">43 asignaturas</div><div class="ust-subnav-item active">e-Learning 2026-1</div><div class="ust-fase-pill" id="fase"></div></div>
 </div>
 <div class="legend"><span style="font-size:10px;font-weight:700;color:var(--ust)">Estados:</span><span class="leg"><span class="leg-dot" style="background:var(--ve)"></span>Realizada / Validada</span><span class="leg"><span class="leg-dot" style="background:var(--am)"></span>Agendada / En construcción</span><span class="leg"><span class="leg-dot" style="background:#9068C0"></span>Enviada</span><span class="leg"><span class="leg-dot" style="background:var(--ro)"></span>Sin respuesta / Alerta</span><span class="leg"><span class="leg-dot" style="background:var(--gr)"></span>No inicia</span></div>
 <div class="tabs" id="tabs"></div>
